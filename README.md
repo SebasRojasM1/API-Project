@@ -26,24 +26,30 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+## Descripcion del proyecto
+### Titulo del proyecto
+FROL
 
-```bash
-$ yarn install
-```
+### ¿Por qué?
+Surge para abordar la necesidad de optimizar el proceso de reserva de servicios, eliminando la limitación de disponibilidad y simplificando la comunicación entre el trabajador y cliente. Todo esto en caso de que, como suele habitualmente, perder tiempo al momento de pedir una cita y no te la concedan de manera inmediata, esperando largo tiempo para ello. 
 
-## Running the app
+### ¿Para qué?
+El propósito es mejorar la eficiencia y la accesibilidad en la gestión de reservas de servicios, tanto para los proveedores que está en el sistema como para los clientes, permitiendo una programación más efectiva y una mayor satisfacción del cliente.
 
-```bash
-# development
-$ yarn run start
+### ¿Para quien?
+Está dirigido tanto a pequeñas como medianas empresas prestadoras de servicios, así como a los clientes que requieren reservar dichos servicios de manera rápida y eficiente.
 
-# watch mode
-$ yarn run start:dev
+### Tematica Electa
+Desarrollo de una plataforma web para la gestión y organización en tiempo real de reservas de servicios.
 
-# production mode
-$ yarn run start:prod
-```
+### Miembros
+- Cristian Camilo Velásquez Cárdenas
+- Estivenson Alejandro Estrada Naranjo
+- Thomas Restrepo
+- Sebastián Rojas
+- Luis Foronda
+
+
 
 ## Test
 
