@@ -1,15 +1,7 @@
 import { Module } from '@nestjs/common';
-<<<<<<< HEAD
 import { AppointmentsModule } from './module/appointments/appointments.module';
-
-@Module({
-  imports: [AppointmentsModule],
-  controllers: [],
-  providers: [],
-=======
-import { ConfigModule } from '@nestjs/config';
 import { PersistenceModule } from './libs/persistence';
-import { register } from 'module';
+import { ConfigModule } from '@nestjs/config';
 import dbConfig from './libs/persistence/db.config';
 
 
@@ -21,8 +13,8 @@ import dbConfig from './libs/persistence/db.config';
       load: [dbConfig],
       isGlobal: true,
     }),
-    PersistenceModule
+    PersistenceModule,
+    AppointmentsModule
   ],
->>>>>>> thomas2
 })
 export class AppModule {}
