@@ -5,7 +5,7 @@ export class CreateAppointmentDto {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  appointmentId: string;
+  id: string;
 
   @ApiProperty()
   businessId: string;
