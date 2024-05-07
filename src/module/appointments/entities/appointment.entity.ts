@@ -7,7 +7,7 @@ export class Appointment extends Document {
   @ApiProperty()
   @IsUUID()
   @Prop()
-  appointmentId: string;
+  id: string;
 
   @ApiProperty()
   @Prop()
