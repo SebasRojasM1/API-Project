@@ -13,4 +13,4 @@ import { BusinessService } from '../business/services/business.service';
   controllers: [BusinessController],
   providers: [BusinessService],
 })
-export class AppointmentsModule {}
+export class BusinessModule {}

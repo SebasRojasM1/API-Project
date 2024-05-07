@@ -50,6 +50,68 @@ Desarrollo de una plataforma web para la gestión y organización en tiempo real
 - Luis Foronda
 
 
+## Arquitectura del proyecto:
+```bash
+src/
+├── modules/
+│   ├── users/
+│   │   ├── controllers/
+│   │   │   └── user.controller.ts
+│   │   ├── services/
+│   │   │   └── user.service.ts
+│   │   ├── dtos/
+│   │   │   └── user.dto.ts
+│   │   ├── entities/
+│   │   │   └── user.entity.ts
+│   │   └── user.module.ts
+│   │
+│   ├── business/
+│   │   ├── controllers/
+│   │   │   └── business.controller.ts
+│   │   ├── services/
+│   │   │   └── business.service.ts
+│   │   ├── dtos/
+│   │   │   └── business.dto.ts
+│   │   ├── entities/
+│   │   │   └── business.entity.ts
+│   │   └── business.module.ts
+│   │
+│   ├── appointments/
+│   │   ├── controllers/
+│   │   │   └── appointments.controller.ts
+│   │   ├── services/
+│   │   │   └── appointments.service.ts
+│   │   ├── dtos/
+│   │   │   └── appointments.dto.ts
+│   │   └── appointments.module.ts
+│   │
+└── libs/
+    ├── persistence/
+    │   ├── db-config.ts 
+    │   └── persistence.module.ts
+    │
+    ├── decorators/
+    │   ├── public-decorator.ts 
+    │   ├── private-decorator.ts 
+    │   ├── auth.decorator.ts
+    │   └── roles.decorator.ts
+    │
+    ├── utils/
+    │   ├── services/
+    │   │   └── hash.service.ts
+    │   └── utils.module.ts
+    │
+    └── auth/
+        ├── controllers/
+        │   └── auth.controller.ts
+        ├── services/
+        │   └── auth.service.ts
+        ├── dtos/
+        │   └── auth.dto.ts
+        ├── entities/
+        │   └── auth.entity.ts
+        └── auth.module.ts
+```
 
 ## Test
 

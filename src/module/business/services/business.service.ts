@@ -29,7 +29,7 @@ export class BusinessService {
     if (existingBusiness) {
       throw new HttpException(
         `The business with ID ${createBusinessDto.businessId} already exists`,
-        HttpStatus.BAD_REQUEST, //Es un código de estado HTTP usado para indicar que la solicitud del cliente no pudo ser procesada debido a un error en la solicitud del cliente.
+        HttpStatus.BAD_REQUEST, 
       );
     }
 

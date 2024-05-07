@@ -3,6 +3,7 @@ import { AppointmentsModule } from './module/appointments/appointments.module';
 import { PersistenceModule } from './libs/persistence';
 import { ConfigModule } from '@nestjs/config';
 import dbConfig from './libs/persistence/db.config';
+import { BusinessModule } from './module/business/business.module';
 
 
 
@@ -14,7 +15,8 @@ import dbConfig from './libs/persistence/db.config';
       isGlobal: true,
     }),
     PersistenceModule,
-    AppointmentsModule
+    AppointmentsModule,
+    BusinessModule
   ],
   controllers: [],
   providers: [],
