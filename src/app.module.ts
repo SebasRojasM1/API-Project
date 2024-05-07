@@ -16,5 +16,7 @@ import dbConfig from './libs/persistence/db.config';
     PersistenceModule,
     AppointmentsModule
   ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

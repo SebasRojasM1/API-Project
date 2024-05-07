@@ -43,4 +43,4 @@ export class Appointment extends Document {
   price: string;
 }
 
-export const appointmentModel = SchemaFactory.createForClass(Appointment);
+export const appointmentSchema = SchemaFactory.createForClass(Appointment);
