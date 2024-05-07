@@ -58,4 +58,6 @@ export class AppointmentsService {
       throw new NotFoundException(`Appointment with id ${id} not found`);
     }
   }
+
+  
 }

@@ -1,6 +1,6 @@
 import { registerBusinessDto } from '../Dtos/business';
 import { userService } from 'src/module/service/user.service';
-import { businessService } from 'src/module/service/business.service';
+import { businessService } from 'src/module/business/services/business.service';
 import { accessToken, jwtPayload } from '../types/index';
 import bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
