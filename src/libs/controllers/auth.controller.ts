@@ -1,7 +1,7 @@
 import { Controller } from "@nestjs/common";
 import {loginBusinessDto, registerBusinessDto } from '../Dtos/business/index'
 import {loginUserDto, registerUserDto} from '../Dtos/users/index'
-import { userEntity, businessEntity } from "src/module/entities";
+import { userEntity, userModel } from "src/module/users/entities/users.entities";
 import { authService } from "../service/auth.service";
 import { Body } from "@nestjs/common";
 

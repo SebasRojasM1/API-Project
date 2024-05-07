@@ -1,6 +1,6 @@
 import { registerBusinessDto } from '../Dtos/business';
-import { userService } from 'src/module/service/user.service';
-import { businessService } from 'src/module/business/services/business.service';
+import { userService } from 'src/module/users/service/user.service';
+import { BusinessService } from 'src/module/business/services/business.service';
 import { accessToken, jwtPayload } from '../types/index';
 import bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class authService {
   constructor(
     private UserService: userService,
-    private BusinessService: businessService,
+    private BusinessService: BusinessService,
   ) {}
 
   async registerBusiness({
