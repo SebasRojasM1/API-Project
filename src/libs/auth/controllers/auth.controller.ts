@@ -1,38 +1,40 @@
-/* eslint-disable prettier/prettier */
-import { Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { LoginBusinessDto, RegisterBusinessDto } from '../Dtos/business/index';
-import { LoginUserDto, RegisterUserDto } from '../Dtos/users';
-import { AuthService } from '../service/auth.service';
-import { Body } from '@nestjs/common';
+import { Controller } from "@nestjs/common";
+import { loginBusinessDto, registerBusinessDto } from "src/libs/Dtos/business";
+import { registerUserDto } from "src/libs/Dtos/users";
+import { loginUserDto } from "src/libs/Dtos/users";
+import { authService } from "../service/auth.service";
+import { Body, Post, Get } from "@nestjs/common";
+
 
 @Controller()
 export class AuthController {
-  constructor(private authService: AuthService) {}
 
-  @Post('business/register')
-  @HttpCode(HttpStatus.CREATED)
-  async register(@Body() registerBusinessDto: RegisterBusinessDto) {
-    const token = await this.authService.registerBusiness(registerBusinessDto);
-    return { access_token: token.access_token };
-  }
-
-  @Post('business/login')
-  @HttpCode(HttpStatus.OK)
-  async logIn(@Body() loginBusinessDto: LoginBusinessDto) {
-    const token = await this.authService.logInBusiness(loginBusinessDto);
-    return { access_token: token.access_token };
-  }
-
-  @Post('users/registerUser')
-    async registerUser(@Body() registerUserDto:RegisterUserDto){
-
-        await this.authService.registerUser(registerUserDto)
+    constructor(private AuthService: authService){}
+    
+    @Post('/registerBusiness')
+    async registerBusiness(@Body() RegisterBusinessDto:registerBusinessDto ){
+        
+        await this.AuthService.registerBusiness(RegisterBusinessDto)
+        
     }
 
-  @Post('users/loginUser')
-    async loginUser(@Body() loginUserDto: LoginUserDto){
+    @Post('/registerUser')
+    async registerUser(@Body() RegisterUserDto:registerUserDto){
+
+        await this.AuthService.registerUser(RegisterUserDto)
+    }
+
+    @Post('/loginBusiness')
+    async loginBusiness(@Body() LoginBusinessDto: loginBusinessDto){
+
+        const dataBusiness = this.AuthService.loginBusiness(LoginBusinessDto)
+        return 
+    }
+
+    @Post('/loginUser')
+    async loginUser(@Body() LoginUserDto: loginUserDto){
         
-        const userData = await this.authService.loginUser(loginUserDto)
+        const userData = await this.AuthService.loginUser(LoginUserDto)
     }
 
 
