@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { LoginBusinessDto, RegisterBusinessDto } from '../Dtos/business/index';
-/* import { loginUserDto, registerUserDto } from '../Dtos/users/index';*/
+import { LoginUserDto, RegisterUserDto } from '../Dtos/users';
 import { AuthService } from '../service/auth.service';
 import { Body } from '@nestjs/common';
 
@@ -22,6 +22,18 @@ export class AuthController {
     const token = await this.authService.logInBusiness(loginBusinessDto);
     return { access_token: token.access_token };
   }
+
+  @Post('users/registerUser')
+    async registerUser(@Body() registerUserDto:RegisterUserDto){
+
+        await this.authService.registerUser(registerUserDto)
+    }
+
+  @Post('users/loginUser')
+    async loginUser(@Body() loginUserDto: LoginUserDto){
+        
+        const userData = await this.authService.loginUser(loginUserDto)
+    }
 
 
  /*  @Post('check')

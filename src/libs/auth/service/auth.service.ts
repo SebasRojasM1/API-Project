@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { RegisterBusinessDto, LoginBusinessDto } from '../Dtos/business/index';
-import { registerUserDto, loginUserDto } from '../Dtos/users';
+import { RegisterUserDto, LoginUserDto } from '../Dtos/users';
 import { BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { userService } from '../../../module/users/service/user.service';
@@ -50,6 +50,43 @@ export class AuthService {
       sub: business.id,
     });
   }
+
+  async registerUser(registerUserDto: RegisterUserDto){
+
+    const validation =  await this.validationEmailForSignUp(registerUserDto.email)
+
+    if(validation == true){
+
+     const {password} = registerUserDto
+
+     const newUserDto = {
+      ...registerUserDto, 
+      password: await bcrypt.hash(password, 10)
+    } 
+
+     const newUserWithModel = new this.userModel(newUserDto)
+
+     await this.UserService.create(newUserWithModel)
+
+     return(HttpStatus.ACCEPTED)
+
+    }
+ }
+
+ async loginUser({email, password}: LoginUserDto){
+
+     const user = await this.UserService.findOneByEmail(email)
+
+     if(!user){
+         throw new BadRequestException("User not found")
+     }
+
+     const isPasswordValid = await this.hashService.compare(password, user.password)
+
+     if(!isPasswordValid){
+         throw new HttpException('Incorrect email or password', HttpStatus.FORBIDDEN)
+     }
+ }
 
 
 
