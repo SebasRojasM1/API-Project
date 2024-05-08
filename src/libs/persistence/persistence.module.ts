@@ -11,9 +11,13 @@ import  dbConfig  from "./db.config";
             useFactory: (configService: ConfigType<typeof dbConfig>) => {
                 
                 try{
-                    const {db, env} = configService; 
-                    const uriDb = env === process.env.DB_ENVIRONMENT ?`${db.local}/${db.name}`
-                    :`${db.srv}://${db.user}:${encodeURIComponent(db.password)}@${db.host}/${db.name}?retryWrites=true&w=majority&appName=@cluster0`;
+                    const { db, env } = configService;
+
+                    console.log(db.password)
+                    console.log(db.user);
+                    //CONEXIÓN
+                    const uriDb = env === 'local' ? `${db.connection}localhost:27017`: 
+                    `mongodb+srv://${db.user}:${db.password}@${db.name}.${db.net}/?retryWrites=true&w=majority&appName=${db.name}`;
                     return {
                         uri: uriDb
                     }
