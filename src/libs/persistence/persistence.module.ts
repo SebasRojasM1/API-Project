@@ -2,6 +2,8 @@ import { Global, Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigType } from "@nestjs/config";
 import  dbConfig  from "./db.config";
+import { businessSchema, userSchema } from "src/module/entities";
+import { userModel, BusinessModel } from "src/module/entities";
 
 @Global()
 @Module({
