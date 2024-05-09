@@ -1,28 +1,26 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Role } from '../../common/enums/rol.enum';
 import { ROLES_KEY } from '../../decorators/roles.decorator';
 
 @Injectable()
-export class RolesGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+export class AuthGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const role = this.reflector.getAllAndOverride<Role>(ROLES_KEY, [
+    const roles = this.reflector.get<Role>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
-    if (!role) {
-      return true;
+    if (!roles) {
+      return true; // Si no hay roles definidos, se permite el acceso
     }
+    const request = context.switchToHttp().getRequest();
+    const user = request.user; // Supongamos que el usuario está disponible en la solicitud
 
-    const { user } = context.switchToHttp().getRequest();
-
-    if (user.role === Role.ADMIN) {
-      return true;
-    }
-
-    return role === user.role;
+    // Verificar si el usuario tiene al menos uno de los roles requeridos
+    return roles.some((role: any) => user.roles.includes(role));
   }
 }

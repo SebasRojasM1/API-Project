@@ -1,14 +1,20 @@
 /* eslint-disable prettier/prettier */
-import { Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { LoginBusinessDto, RegisterBusinessDto } from '../Dtos/business/index';
 import { LoginUserDto, RegisterUserDto } from '../Dtos/users';
 import { AuthService } from '../service/auth.service';
 import { Body } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '../guard/roles.guard';
+import { Roles } from 'src/libs/decorators';
+import { Role } from 'src/libs/common/enums/rol.enum';
 
 @Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @UseGuards(AuthGuard)
+  @Roles(Role.ADMIN)
   @Post('business/register')
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() registerBusinessDto: RegisterBusinessDto) {
@@ -16,6 +22,8 @@ export class AuthController {
     return { access_token: token.access_token };
   }
 
+  @UseGuards(AuthGuard)
+  @Roles(Role.ADMIN)
   @Post('business/login')
   @HttpCode(HttpStatus.OK)
   async logIn(@Body() loginBusinessDto: LoginBusinessDto) {
@@ -36,11 +44,12 @@ export class AuthController {
     }
 
 
- /*  @Post('check')
-  @UseGuards(AtGuard)
+  @Post('check')
+  @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   async check() {
     return true;
-  } */
+  }
 }
+  
