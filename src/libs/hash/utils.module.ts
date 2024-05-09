@@ -4,4 +4,4 @@ import { HashService } from './service/hash.service';
 @Module({
   providers: [HashService]
 })
-export class HashModule {}
+export class UtilsModule {}

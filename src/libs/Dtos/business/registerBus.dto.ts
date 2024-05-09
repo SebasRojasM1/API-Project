@@ -1,5 +1,5 @@
-import { businessSchema } from "src/module/entities";
+import { BusinessEntity} from "src/module";
 
-export class registerBusinessDto extends businessSchema{
+export class registerBusinessDto extends BusinessEntity{
 
 }

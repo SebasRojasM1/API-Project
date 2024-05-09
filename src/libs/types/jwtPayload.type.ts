@@ -1,3 +1,3 @@
-export type jwtPayload = {
-    firm: number
+export type JwtPayload = {
+    sub: number
 }

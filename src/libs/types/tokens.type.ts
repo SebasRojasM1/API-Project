@@ -1,3 +1,3 @@
 export type Tokens = {
-    AccessToken: string
+    Access_token: string
 }

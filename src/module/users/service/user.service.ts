@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { userSchema } from 'src/module/entities/entityUser/users.entities';
+import { userEntity} from 'src/module/users/entities/users.entities';
 import { InjectModel } from '@nestjs/mongoose';
 import { registerUserDto } from 'src/libs/Dtos/users';
 import { Model } from 'mongoose';
@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 @Injectable()
 export class userService {
 
-    constructor(@InjectModel(userSchema.name) private userModel: Model<userSchema>){}
+    constructor(@InjectModel(userEntity.name) private userModel: Model<userEntity>){}
 
     async findAll(){
         return this.userModel.find()
@@ -26,7 +26,7 @@ export class userService {
         return await this.userModel.findById(id)
     }
 
-    async create(RegisterUserDto: registerUserDto): Promise<userSchema>{
+    async create(RegisterUserDto: registerUserDto): Promise<userEntity>{
 
         const recentUser = await this.userModel.findOne({email: RegisterUserDto.email}).exec()
 

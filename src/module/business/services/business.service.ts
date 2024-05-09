@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { businessSchema } from '../entities';
+import { BusinessEntity} from '../..';
 import { registerBusinessDto } from 'src/libs/Dtos/business';
 import { Model } from 'mongoose';
 
 @Injectable()
-export class businessService {
+export class BusinessService {
 
-    constructor(@InjectModel(businessSchema.name) private businessModel: Model<businessSchema>){}
+    constructor(@InjectModel(BusinessEntity.name) private businessModel: Model<BusinessEntity>){}
 
     async findAll(){
         return this.businessModel.find()
@@ -32,7 +32,7 @@ export class businessService {
             const newBusiness = new this.businessModel(RegisterBusinessDto)
             return await newBusiness.save()
         } catch(error){
-            console.error('Error saving the recent Business')
+            console.error(`Error saving the recent business ${error}`)
         }
       
     }

@@ -3,11 +3,7 @@ import { Document } from "mongoose";
 import { IsEmail, IsNumber, IsString, IsUrl, Length, MaxLength, MinLength } from "class-validator";
 
 @Schema({collection: 'business', timestamps: true})
-export class businessSchema extends Document{
-
-    @Prop({required: true})
-    @IsString()
-    businessId: string
+export class BusinessEntity extends Document{
 
     @Prop({required: true})
     @IsString()
@@ -48,5 +44,5 @@ export class businessSchema extends Document{
 
 }
 
-export const BusinessModel = SchemaFactory.createForClass(businessSchema)
-BusinessModel.set('autoCreate', true);
+export const businessSchema = SchemaFactory.createForClass(BusinessEntity)
+businessSchema.set('autoCreate', true);

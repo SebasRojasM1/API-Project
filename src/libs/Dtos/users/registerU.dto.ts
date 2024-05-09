@@ -1,3 +1,3 @@
-import { userSchema } from "src/module/entities/entityUser/users.entities";
+import { userEntity } from "src/module/users/entities/users.entities";
 
-export class registerUserDto extends userSchema {}
+export class registerUserDto extends userEntity {}

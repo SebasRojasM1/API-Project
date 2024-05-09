@@ -1,27 +1,28 @@
 import { loginBusinessDto, registerBusinessDto } from "src/libs/Dtos/business";
 import { BadRequestException, HttpException, HttpStatus } from "@nestjs/common";
 import { loginUserDto, registerUserDto } from "src/libs/Dtos/users";
-import { businessSchema, userSchema } from "src/module/entities";
-import { businessService, userService } from 'src/module/service/index'
-import { HashService } from "src/libs/utils/hash/service/hash.service";
-import { Tokens, jwtPayload } from "src/libs/types";
+import { BusinessEntity, userEntity} from "src/module";
+import { BusinessService } from "src/module/business/services/business.service";
+import { userService } from "src/module/users/service/user.service";
+import { HashService } from "src/libs/hash/service/hash.service";
+import { Tokens, JwtPayload} from "src/libs/types";
 import * as bcrypt from 'bcryptjs'
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { JwtService } from "@nestjs/jwt";
 
 
-export class authService {
+export class AuthService {
 
     constructor(
 
         private UserService: userService, 
-        private BusinessService: businessService, 
+        private BusinessService: BusinessService, 
         private hashService: HashService, 
         private jwtService: JwtService,
 
-        @InjectModel(businessSchema.name) private businessModel: Model<businessSchema>, 
-        @InjectModel(userSchema.name) private userModel: Model<userSchema> 
+        @InjectModel(BusinessEntity.name) private businessModel: Model<BusinessEntity>, 
+        @InjectModel(userEntity.name) private userModel: Model<userEntity> 
     
     ){}
 
@@ -41,15 +42,13 @@ export class authService {
                 const newBusinessWithModel = new this.businessModel(newBusiness)
                 
                 return await this.BusinessService.create(newBusinessWithModel) 
+                
         } catch(error){
             console.error(`Error with the business register ${error}`)
         }
-       
-    
     }
 
     async loginBusiness({email, password}: loginBusinessDto): Promise<Tokens>{
-
 
         try{
 
@@ -60,14 +59,16 @@ export class authService {
                 throw new Error('Email or password incorrect')
             }
     
-            const businessPassword = this.BusinessService.findByPassword(password)
+            const isPasswordValid = await this.hashService.compare(
+            password, 
+            businessFind.password)
     
-            if(!businessPassword){
+            if(!isPasswordValid){
                 throw new Error('Email or Password incorrect')
             }
     
             return await this.getTokens({
-                firm: businessFind.id
+                sub: businessFind.id
             });
 
         } catch(error){
@@ -124,7 +125,7 @@ export class authService {
             }
 
             return await this.getTokens({
-                firm: userFind.id
+                sub: userFind.id
             })
 
         } catch(error){
@@ -134,7 +135,7 @@ export class authService {
         
     }
 
-    async getTokens(jwtPayload: jwtPayload): Promise<Tokens>{
+    async getTokens(jwtPayload: JwtPayload): Promise<Tokens>{
 
         const secret_key = process.env.JWT_SECRETKEY;
 
@@ -153,10 +154,10 @@ export class authService {
             tokenOptions
         )
 
-        return {AccessToken: accessToken}
+        return {Access_token: accessToken}
     }
 
-    async signToken(payload: jwtPayload, secretKey:string, options:any){
+    async signToken(payload: JwtPayload, secretKey:string, options:any){
         return await this.jwtService.signAsync(payload, {
             secret: secretKey,
             ...options

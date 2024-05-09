@@ -1,16 +1,17 @@
-import { Global, Module } from "@nestjs/common";
+import { ConsoleLogger, Global, Module, OnModuleInit } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigType } from "@nestjs/config";
 import  dbConfig  from "./db.config";
-import { userModel, BusinessModel } from "src/module/entities";
+import {businessSchema, userSchema } from "src/module";
 import mongoose from "mongoose";
+import { Console } from "console";
 
 @Global()
 @Module({
     imports: [
         MongooseModule.forFeature([
-            {name: 'users', schema: userModel},
-            {name: 'business', schema: BusinessModel}
+            {name: 'users', schema: userSchema},
+            {name: 'business', schema: businessSchema}
         ]),
         MongooseModule.forRootAsync({
             useFactory: (configService: ConfigType<typeof dbConfig>) => {
@@ -26,17 +27,23 @@ import mongoose from "mongoose";
         })
     ],
 })
-export class PersistenceModule{
+export class PersistenceModule implements OnModuleInit{
 
-    constructor() {
-        this.checkDatabaseConnection();
+    onModuleInit() {
+         this.checkDatabaseConnection();
       }
     
-      private checkDatabaseConnection() {
+       private async checkDatabaseConnection() {
         const db = mongoose.connection;
-        db.on('error', console.error.bind(console, 'connection error:'));
-        db.once('open', () => {
-          console.log("Connected to MongoDB");
-        });
+
+        if(db.readyState === 1){
+            console.log("Connected to MongoDB");
+        } else {
+            db.on('error', () => {console.log("Error")});
+            db.once('open', () => {
+                console.log("Connected to MongoDB")
+            });
+        }
+        
     }
 }

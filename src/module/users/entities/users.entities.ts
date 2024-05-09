@@ -6,7 +6,7 @@ import { SchemaFactory } from "@nestjs/mongoose";
 
 
 @Schema({collection: 'users', timestamps: true})
-export class userSchema extends Document{
+export class userEntity extends Document{
     
     @ApiProperty()
     @IsUUID()
@@ -32,5 +32,5 @@ export class userSchema extends Document{
     password: string;
 }
 
-export const userModel = SchemaFactory.createForClass(userSchema)
-userModel.set('autoCreate', true);
+export const userSchema = SchemaFactory.createForClass(userEntity)
+userSchema.set('autoCreate', true);

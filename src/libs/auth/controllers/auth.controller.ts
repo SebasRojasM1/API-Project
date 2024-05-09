@@ -1,39 +1,54 @@
-import { Controller } from "@nestjs/common";
-import { loginBusinessDto, registerBusinessDto } from "src/libs/Dtos/business";
-import { registerUserDto } from "src/libs/Dtos/users";
-import { loginUserDto } from "src/libs/Dtos/users";
-import { authService } from "../service/auth.service";
-import { Body, Post, Get } from "@nestjs/common";
-import { Tokens } from "src/libs/types";
+import { Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { loginBusinessDto, registerBusinessDto } from 'src/libs/Dtos/business/index';
+import { loginUserDto, registerUserDto} from 'src/libs/Dtos/users/index';
+import { Tokens} from 'src/libs/types';
+import { AuthService } from '../service/auth.service';
+import { Body } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
+// import { AtGuard } from '../guards/roles.guard';
+import { Roles } from 'src/libs/decorators';
+import { Role } from 'src/libs/common/enums/rol.enum';
 
 
 @Controller('auth')
 export class AuthController {
 
-    constructor(private AuthService: authService){}
+    constructor(private authService: AuthService){}
     
-    @Post('/registerBusiness')
+    // @UseGuards(AtGuard)
+    @Roles(Role.ADMIN)
+    @Post('business/register')
     async registerBusiness(@Body() RegisterBusinessDto:registerBusinessDto): Promise<registerBusinessDto>{
 
-            return await this.AuthService.registerBusiness(RegisterBusinessDto)
+            return await this.authService.registerBusiness(RegisterBusinessDto)
     }
 
-    @Post('/registerUser')
-    async registerUser(@Body() RegisterUserDto:registerUserDto): Promise<registerUserDto>{
-
-        return await this.AuthService.registerUser(RegisterUserDto) 
-    }
-
-    @Post('/loginBusiness')
+    // @UseGuards(AuthGuard)
+    @Roles(Role.ADMIN)
+    @Post('business/login')
     async loginBusiness(@Body() LoginBusinessDto: loginBusinessDto): Promise<Tokens>{
        
-        return await this.AuthService.loginBusiness(LoginBusinessDto) 
+        return await this.authService.loginBusiness(LoginBusinessDto) 
+    }
+    
+    @Post('user/register')
+    async registerUser(@Body() RegisterUserDto:registerUserDto): Promise<registerUserDto>{
+
+        return await this.authService.registerUser(RegisterUserDto) 
     }
 
-    @Post('/loginUser')
+    @Post('login/user')
     async loginUser(@Body() LoginUserDto: loginUserDto): Promise<Tokens>{
     
-        return await this.AuthService.loginUser(LoginUserDto)
+        return await this.authService.loginUser(LoginUserDto)
 
+    }
+
+    @Post('check')
+    // @UseGuards(AuthGuard)
+    @ApiBearerAuth()
+    @HttpCode(HttpStatus.OK)
+    async check() {
+        return true;
     }
 }
