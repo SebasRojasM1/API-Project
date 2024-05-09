@@ -1,12 +1,18 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable, ExecutionContext, Logger, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { AuthGuard } from '@nestjs/passport';
 import { Role } from '../../common/enums/rol.enum';
 import { ROLES_KEY } from '../../decorators/roles.decorator';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+export class AtGuard extends AuthGuard('jwt') {
+  private readonly logger = new Logger(AtGuard.name);
+
+
+  constructor(private reflector: Reflector) {
+    super();
+  }
 
   canActivate(context: ExecutionContext): boolean {
     const roles = this.reflector.get<Role>(ROLES_KEY, [
@@ -22,5 +28,19 @@ export class AuthGuard implements CanActivate {
 
     // Verificar si el usuario tiene al menos uno de los roles requeridos
     return roles.some((role: any) => user.roles.includes(role));
+  }
+
+  handleRequest(err, user, info: Error) {
+    if (err || info) {
+      this.logger.error(`JWT error: ${info.message || err}`);
+      throw new HttpException('Token is expired!', HttpStatus.UNAUTHORIZED);
+    }
+
+    if (!user) {
+      this.logger.warn('Access Denied: Unauthorized access attempt');
+      throw new UnauthorizedException('Access Denied.');
+    }
+
+    return user;
   }
 }
