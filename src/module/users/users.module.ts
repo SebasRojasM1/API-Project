@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AppointmentsService } from '../appointments/services/appointments.service';
-import { AppointmentsController } from '../appointments/controllers/appointments.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Appointment, appointmentSchema } from '../appointments/entities/appointment.entity';
+import { userSchema, User } from './entities/users.entities';
+import { UsersController } from './controllers/users.controller';
+import { userService } from './service/user.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Appointment.name, schema: appointmentSchema },
-    ]),
+    MongooseModule.forFeature([{ name: User.name, schema: userSchema }]),
   ],
-  controllers: [AppointmentsController],
-  providers: [AppointmentsService],
+  controllers: [UsersController],
+  providers: [userService],
 })
-export class AppointmentsModule {}
+export class UsersModule {}

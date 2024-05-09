@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './controllers/auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { UtilsModule } from '../hash/utils.module';
-/* import { UsersModule } from '@modules/users/users.module'; */
 import { JwtStrategy } from './strategies/at.strategy';
 import { AuthService } from './service/auth.service';
+import { UsersModule } from 'src/module/users/users.module';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { AuthService } from './service/auth.service';
       signOptions: { expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '15m' },
     }),
     UtilsModule,
-    /* UsersModule */,
+    UsersModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

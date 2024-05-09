@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { RegisterBusinessDto, LoginBusinessDto } from '../Dtos/business/index';
 import { RegisterUserDto, LoginUserDto } from '../Dtos/users';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { userService } from '../../../module/users/service/user.service';
 import { BusinessService } from '../../../module/business/services/business.service';

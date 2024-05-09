@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsNumber,
   IsString,
+  IsUUID,
   IsUrl,
   Length,
   MaxLength,
@@ -11,10 +12,11 @@ import {
 } from 'class-validator';
 
 @Schema({ timestamps: true })
-export class BusinessEntity {
+export class BusinessEntity extends Document {
   @Prop({ required: true })
   @IsString()
-  businessId: string;
+  @IsUUID()
+  id: string;
 
   @Prop({ required: true })
   @IsString()

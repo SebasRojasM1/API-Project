@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppointmentsModule } from './module/appointments/appointments.module';
 import { PersistenceModule } from './libs/persistence';
 import { ConfigModule } from '@nestjs/config';
 import dbConfig from './libs/persistence/db.config';
 import { BusinessModule } from './module/business/business.module';
-
-
+import { UsersModule } from './module/users/users.module';
 
 @Module({
   imports: [
@@ -15,8 +13,8 @@ import { BusinessModule } from './module/business/business.module';
       isGlobal: true,
     }),
     PersistenceModule,
-    AppointmentsModule,
-    BusinessModule
+    UsersModule,
+    BusinessModule,
   ],
   controllers: [],
   providers: [],
