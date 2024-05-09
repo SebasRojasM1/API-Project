@@ -4,7 +4,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { UtilsModule } from '../hash/utils.module';
 import { JwtStrategy } from './strategies/at.strategy';
 import { AuthService } from './service/auth.service';
-import { UsersModule } from 'src/module/users/users.module';
+import { UsersModule } from '../../module/users/users.module';
+import { BusinessModule } from 'src/module/business/business.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UsersModule } from 'src/module/users/users.module';
     }),
     UtilsModule,
     UsersModule,
+    BusinessModule
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

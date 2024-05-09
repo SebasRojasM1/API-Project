@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import dbConfig from './libs/persistence/db.config';
 import { BusinessModule } from './module/business/business.module';
 import { UsersModule } from './module/users/users.module';
+import { AuthModule } from './libs/auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UsersModule } from './module/users/users.module';
     PersistenceModule,
     UsersModule,
     BusinessModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
