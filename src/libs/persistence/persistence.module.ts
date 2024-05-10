@@ -1,11 +1,11 @@
-import { ConsoleLogger, Global, Module, OnModuleInit } from "@nestjs/common";
+/* eslint-disable prettier/prettier */
+import { Global, Module, OnModuleInit } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigType } from "@nestjs/config";
 import  dbConfig  from "./db.config";
-import {businessSchema, userSchema } from "src/module";
 import mongoose from "mongoose";
-import { Console } from "console";
-
+import { businessSchema} from "../../module/business/entities/business.entity";
+import { userSchema } from "../../module/users/entities/users.entities";
 @Global()
 @Module({
     imports: [

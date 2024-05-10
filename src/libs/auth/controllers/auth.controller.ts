@@ -1,54 +1,57 @@
-import { Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
-import { loginBusinessDto, registerBusinessDto } from 'src/libs/Dtos/business/index';
-import { loginUserDto, registerUserDto} from 'src/libs/Dtos/users/index';
-import { Tokens} from 'src/libs/types';
+/* eslint-disable prettier/prettier */
+import { Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { LoginBusinessDto, RegisterBusinessDto } from "../dto/business";
+import { LoginUserDto, RegisterUserDto } from '../dto/users';
 import { AuthService } from '../service/auth.service';
 import { Body } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../common/enums/rol.enum';
 // import { AtGuard } from '../guards/roles.guard';
-import { Roles } from 'src/libs/decorators';
-import { Role } from 'src/libs/common/enums/rol.enum';
-
 
 @Controller('auth')
 export class AuthController {
+  constructor(private authService: AuthService) {}
 
-    constructor(private authService: AuthService){}
-    
-    // @UseGuards(AtGuard)
-    @Roles(Role.ADMIN)
-    @Post('business/register')
-    async registerBusiness(@Body() RegisterBusinessDto:registerBusinessDto): Promise<registerBusinessDto>{
+  // @UseGuards(AtGuard)
+  @Roles(Role.ADMIN)
+  @HttpCode(HttpStatus.CREATED)
+  @Post('business/register')
+  async registerBusiness(@Body() registerBusinessDto: RegisterBusinessDto) {
+    const token = await this.authService.registerBusiness(registerBusinessDto);
+    return { access_token: token.access_token };
+  }
 
-            return await this.authService.registerBusiness(RegisterBusinessDto)
-    }
+  // @UseGuards(AuthGuard)
+  //@Roles(Role.ADMIN)
+  @HttpCode(HttpStatus.OK)
+  @Post('business/login')
+  async logInBusiness(@Body() loginBusinessDto: LoginBusinessDto) {
+    const token = await this.authService.logInBusiness(loginBusinessDto);
+    return { access_token: token.access_token };
+  }
 
-    // @UseGuards(AuthGuard)
-    @Roles(Role.ADMIN)
-    @Post('business/login')
-    async loginBusiness(@Body() LoginBusinessDto: loginBusinessDto): Promise<Tokens>{
-       
-        return await this.authService.loginBusiness(LoginBusinessDto) 
-    }
-    
-    @Post('user/register')
-    async registerUser(@Body() RegisterUserDto:registerUserDto): Promise<registerUserDto>{
 
-        return await this.authService.registerUser(RegisterUserDto) 
-    }
+  @Post('user/register')
+  @HttpCode(HttpStatus.CREATED)
+  async registerUser(@Body() registerUser: RegisterUserDto) {
+    const token = await this.authService.registerUser(registerUser);
+    return { access_token: token.access_token };
+  }
 
-    @Post('login/user')
-    async loginUser(@Body() LoginUserDto: loginUserDto): Promise<Tokens>{
-    
-        return await this.authService.loginUser(LoginUserDto)
+  @Post('login/user')
+  @HttpCode(HttpStatus.OK)
+  async logInUser(@Body() loginUserDto: LoginUserDto) {
+    const token = await this.authService.logInBusiness(loginUserDto);
+    return { access_token: token.access_token };
+  }
 
-    }
 
-    @Post('check')
-    // @UseGuards(AuthGuard)
-    @ApiBearerAuth()
-    @HttpCode(HttpStatus.OK)
-    async check() {
-        return true;
-    }
+  @Post('check')
+  // @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  async check() {
+    return true;
+  }
 }
