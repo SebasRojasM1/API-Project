@@ -4,6 +4,7 @@ import { PersistenceModule } from './libs/persistence';
 import dbConfig from './libs/persistence/db-config';
 import { UsersModule } from './module/users/users.module';
 import { BusinessModule } from './module/business/business.module';
+import { AuthModule } from './libs/auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -13,7 +14,8 @@ import { BusinessModule } from './module/business/business.module';
     }),
     PersistenceModule,
     UsersModule,
-    BusinessModule
+    BusinessModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
