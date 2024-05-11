@@ -1,21 +1,13 @@
-/* eslint-disable prettier/prettier */
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  Put,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { BusinessService } from '../services/business.service';
-import { CreateBusinessDto, UpdateBusinessDto } from '../dto';
+import { CreateBusinessDto } from '../dto/create-business.dto';
+import { UpdateBusinessDto } from '../dto/update-business.dto';
 
 @Controller('business')
 export class BusinessController {
   constructor(private readonly businessService: BusinessService) {}
 
-  @Post('/create')
+  @Post()
   create(@Body() createBusinessDto: CreateBusinessDto) {
     return this.businessService.create(createBusinessDto);
   }
@@ -27,19 +19,16 @@ export class BusinessController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.businessService.findById(id);
+    return this.businessService.findOne(+id);
   }
 
-  @Put('update/:id')
-  update(
-    @Param('id') id: number,
-    @Body() updateBusinessDto: UpdateBusinessDto,
-  ) {
-    return this.businessService.update(id, updateBusinessDto);
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateBusinessDto: UpdateBusinessDto) {
+    return this.businessService.update(+id, updateBusinessDto);
   }
 
-  @Delete('delete/:id')
+  @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.businessService.remove(id);
+    return this.businessService.remove(+id);
   }
 }

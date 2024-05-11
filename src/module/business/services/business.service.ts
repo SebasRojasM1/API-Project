@@ -1,57 +1,26 @@
-/* eslint-disable prettier/prettier */
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { BusinessEntity } from '../entities/business.entity';
-import { CreateBusinessDto, UpdateBusinessDto } from '../dto';
-import { Model } from 'mongoose';
+import { Injectable } from '@nestjs/common';
+import { CreateBusinessDto } from '../dto/create-business.dto';
+import { UpdateBusinessDto } from '../dto/update-business.dto';
 
 @Injectable()
 export class BusinessService {
+  create(createBusinessDto: CreateBusinessDto) {
+    return 'This action adds a new business';
+  }
 
-    constructor(private businessModel: Model<BusinessEntity>){}
+  findAll() {
+    return `This action returns all business`;
+  }
 
-    async findAll(){
-        return this.businessModel.find()
-    }
+  findOne(id: number) {
+    return `This action returns a #${id} business`;
+  }
 
-    async findOneByEmail(email: string){
-        return await this.businessModel.findOne({email})
-    }
+  update(id: number, updateBusinessDto: UpdateBusinessDto) {
+    return `This action updates a #${id} business`;
+  }
 
-    async findById(id: string){
-        return await this.businessModel.findById(id)
-    }
-
-    async create(createBusinessDto: CreateBusinessDto){
-        const existingBusiness = await this.businessModel
-      .findOne({ businessId: createBusinessDto.businessId })
-      .exec();
-
-    if (existingBusiness) {
-      throw new HttpException(
-        `The business with ID ${createBusinessDto.businessId} already exists`,
-        HttpStatus.BAD_REQUEST, 
-      );
-    }
-
-    const createdBusiness = new this.businessModel(createBusinessDto);
-    return createdBusiness.save();
-    }
-
-    async update(id: number, updateBusinessDto: UpdateBusinessDto): Promise<BusinessEntity> {
-      const updateBusiness = await this.businessModel
-        .findByIdAndUpdate(id, updateBusinessDto, { new: true })
-        .exec();
-      if (!updateBusiness) {
-        throw new NotFoundException(`Business with id ${id} not found`);
-      }
-      return updateBusiness;
-    }
-
-    async remove(id: string): Promise<void> {
-      const business = await this.businessModel.findOneAndDelete().exec();
-      if (!business) {
-        throw new NotFoundException(`Business with id ${id} not found`);
-      }
-    }
-
+  remove(id: number) {
+    return `This action removes a #${id} business`;
+  }
 }

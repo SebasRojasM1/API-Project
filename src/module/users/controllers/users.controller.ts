@@ -1,42 +1,34 @@
-/* eslint-disable prettier/prettier */
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  Put,
-} from '@nestjs/common';
-import { userService } from '../service/user.service';
-import { CreateUserDto, UpdateUserDto } from '../dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { UsersService } from '../services/users.service';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
-@Controller('user')
+@Controller('users')
 export class UsersController {
-  constructor(private readonly UserService: userService) {}
+  constructor(private readonly usersService: UsersService) {}
 
-  @Post('/create')
+  @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.UserService.create(createUserDto);
+    return this.usersService.create(createUserDto);
   }
 
   @Get()
   findAll() {
-    return this.UserService.findAll();
+    return this.usersService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.UserService.findById(id);
+    return this.usersService.findOne(+id);
   }
 
-  @Put('update/:id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.UserService.update(id, updateUserDto);
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(+id, updateUserDto);
   }
 
-  @Delete('delete/:id')
+  @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.UserService.remove(id);
+    return this.usersService.remove(+id);
   }
 }

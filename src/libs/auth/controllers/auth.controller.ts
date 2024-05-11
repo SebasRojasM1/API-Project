@@ -1,55 +1,34 @@
-/* eslint-disable prettier/prettier */
-import { Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
-import { LoginBusinessDto, RegisterBusinessDto } from '../Dtos/business/index';
-import { LoginUserDto, RegisterUserDto } from '../Dtos/users';
-import { AuthService } from '../service/auth.service';
-import { Body } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { AuthGuard } from '../guard/roles.guard';
-import { Roles } from 'src/libs/decorators';
-import { Role } from 'src/libs/common/enums/rol.enum';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { AuthService } from '../services/auth.service';
+import { CreateAuthDto } from '../dto/users/login-users.dto';
+import { UpdateAuthDto } from '../dto/users/signup-users.dto';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AuthGuard)
-  @Roles(Role.ADMIN)
-  @Post('business/register')
-  @HttpCode(HttpStatus.CREATED)
-  async register(@Body() registerBusinessDto: RegisterBusinessDto) {
-    const token = await this.authService.registerBusiness(registerBusinessDto);
-    return { access_token: token.access_token };
+  @Post()
+  create(@Body() createAuthDto: CreateAuthDto) {
+    return this.authService.create(createAuthDto);
   }
 
-  @UseGuards(AuthGuard)
-  @Roles(Role.ADMIN)
-  @Post('business/login')
-  @HttpCode(HttpStatus.OK)
-  async logIn(@Body() loginBusinessDto: LoginBusinessDto) {
-    const token = await this.authService.logInBusiness(loginBusinessDto);
-    return { access_token: token.access_token };
+  @Get()
+  findAll() {
+    return this.authService.findAll();
   }
 
-  @Post('users/registerUser')
-    async registerUser(@Body() registerUserDto:RegisterUserDto){
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.authService.findOne(+id);
+  }
 
-        await this.authService.registerUser(registerUserDto)
-    }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+    return this.authService.update(+id, updateAuthDto);
+  }
 
-  @Post('users/loginUser')
-    async loginUser(@Body() loginUserDto: LoginUserDto){
-        
-        const userData = await this.authService.loginUser(loginUserDto)
-    }
-
-
-  @Post('check')
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  @HttpCode(HttpStatus.OK)
-  async check() {
-    return true;
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.authService.remove(+id);
   }
 }
-  
