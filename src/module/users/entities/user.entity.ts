@@ -1,12 +1,10 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Role } from '../../../libs/common/enums/rol.enum';
+import { Document } from 'mongoose';
 
+@Schema({ timestamps: true })
 export class User extends Document{
-  @IsString()
-  @Prop({ required: true })
-  id: string;
-
   @IsString()
   @Prop({ required: true })
   name: string;

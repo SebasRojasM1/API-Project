@@ -11,10 +11,6 @@ import {
 } from 'class-validator';
 
 export class CreateBusinessDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  id: string;
 
   @ApiProperty()
   @IsNotEmpty()

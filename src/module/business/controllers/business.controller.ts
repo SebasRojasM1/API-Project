@@ -1,15 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { BusinessService } from '../services/business.service';
 import { CreateBusinessDto } from '../dto/create-business.dto';
 import { UpdateBusinessDto } from '../dto/update-business.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-@Controller('business')
+@ApiTags('Business') 
+@ApiBearerAuth() 
+@Controller('user')
 export class BusinessController {
   constructor(private readonly businessService: BusinessService) {}
 
-  @Post()
-  create(@Body() createBusinessDto: CreateBusinessDto) {
-    return this.businessService.create(createBusinessDto);
+  @Post("create")
+  create(@Body() createBusiness: CreateBusinessDto) {
+    return this.businessService.create(createBusiness);
   }
 
   @Get()
@@ -19,16 +22,16 @@ export class BusinessController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.businessService.findOne(+id);
+    return this.businessService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put('update/:id')
   update(@Param('id') id: string, @Body() updateBusinessDto: UpdateBusinessDto) {
-    return this.businessService.update(+id, updateBusinessDto);
+    return this.businessService.updateBusiness(id, updateBusinessDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
-    return this.businessService.remove(+id);
+    return this.businessService.deleteBusiness(id);
   }
 }

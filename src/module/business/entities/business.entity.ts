@@ -1,11 +1,9 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsNumber, IsString, Length } from 'class-validator';
 import { Document } from 'mongoose';
 
-export class Business extends Document{
-  @IsString()
-  @Prop({ required: true })
-  id: string;
+@Schema({ timestamps: true })
+export class Business extends Document {
 
   @IsString()
   @Prop({ required: true })
