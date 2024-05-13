@@ -1,12 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsNumber, IsString, IsUrl, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsUrl,
+  Length,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
-export class RegisterBusinessDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  businessId: string;
-
+export class BusinessSignUpDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -19,7 +23,6 @@ export class RegisterBusinessDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
   @IsEmail()
   email: string;
 
@@ -30,14 +33,14 @@ export class RegisterBusinessDto {
 
   @ApiProperty()
   @IsNotEmpty()
+  @Length(6, 50)
   @IsString()
-  @Length(10, 50)
   description: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  @Length(8, 10)
+  @Length(8, 15)
   nit: number;
 
   @ApiProperty()
@@ -49,5 +52,12 @@ export class RegisterBusinessDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
+  @MinLength(8, {
+    message: 'The characters minimum is 8. Please complete your password',
+  })
+  @MaxLength(25, {
+    message:
+      'The maximum characters allowed are 25. Please restructure the password',
+  })
   password: string;
 }

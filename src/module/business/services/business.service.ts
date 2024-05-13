@@ -1,58 +1,74 @@
-/* eslint-disable prettier/prettier */
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { BusinessEntity } from '../entities/business.entity';
-import { CreateBusinessDto, UpdateBusinessDto } from '../dto';
-import { Model } from 'mongoose';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { CreateBusinessDto } from '../dto/create-business.dto';
+import { UpdateBusinessDto } from '../dto/update-business.dto';
 import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Business } from '../entities/business.entity';
 
 @Injectable()
 export class BusinessService {
+  constructor(
+    @InjectModel(Business.name) private businessModel: Model<Business>,
+  ) {}
 
-    constructor(@InjectModel(BusinessEntity.name) private businessModel: Model<BusinessEntity>){}
-
-    async findAll(){
-        return this.businessModel.find()
-    }
-
-    async findOneByEmail(email: string){
-        return await this.businessModel.findOne({email})
-    }
-
-    async findById(id: string){
-        return await this.businessModel.findById(id)
-    }
-
-    async create(createBusinessDto: CreateBusinessDto){
-        const existingBusiness = await this.businessModel
-      .findOne({ businessId: createBusinessDto.businessId })
+  async create(CreateBusiness: CreateBusinessDto): Promise<Business> {
+    const businessExist = await this.businessModel
+      .findOne({ email: CreateBusiness.email })
       .exec();
 
-    if (existingBusiness) {
+    if (businessExist) {
       throw new HttpException(
-        `The business with ID ${createBusinessDto.businessId} already exists`,
+        `Business with email ${CreateBusiness.email} already exists`,
         HttpStatus.BAD_REQUEST, 
       );
     }
 
-    const createdBusiness = new this.businessModel(createBusinessDto);
+    const createdBusiness = new this.businessModel(CreateBusiness);
     return createdBusiness.save();
-    }
+  }
 
-    async update(id: number, updateBusinessDto: UpdateBusinessDto): Promise<BusinessEntity> {
-      const updateBusiness = await this.businessModel
-        .findByIdAndUpdate(id, updateBusinessDto, { new: true })
-        .exec();
-      if (!updateBusiness) {
-        throw new NotFoundException(`Business with id ${id} not found`);
-      }
-      return updateBusiness;
-    }
+  findAll(): Promise<Business[]> {
+    return this.businessModel.find().exec();
+  }
 
-    async remove(id: string): Promise<void> {
-      const business = await this.businessModel.findOneAndDelete().exec();
-      if (!business) {
-        throw new NotFoundException(`Business with id ${id} not found`);
-      }
+  async findOne(id: string): Promise<Business> {
+    const business = await this.businessModel.findById(id).exec();
+    if (!business) {
+      throw new NotFoundException(`The business with the id ${id} not found`);
     }
+    return business;
+  }
 
+  async findOneByEmail(email: string): Promise<Business> {
+    const business = await this.businessModel.findOne({email}).exec();
+    if (!business) {
+      throw new NotFoundException(
+        `The business with email ${email} it´s not found`,
+      );
+    }
+    return business;
+  }
+
+  async updateBusiness(id: string, updateBusiness: UpdateBusinessDto): Promise<Business> {
+    const updatedBusiness = await this.businessModel
+      .findByIdAndUpdate(id, updateBusiness, { new: true })
+      .exec();
+    if (!updatedBusiness) {
+      throw new NotFoundException(`The business with id ${id} it´s not found. Try again.`);
+    }
+    return updatedBusiness;
+  }
+
+  async deleteBusiness(id: string){
+    const business = await this.businessModel.findOneAndDelete().exec();
+    if (!business) {
+      throw new NotFoundException(`The business with id ${id} it´s not found. Try again.`);
+    }
+    return business
+  }
 }

@@ -3,15 +3,13 @@ import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
-  IsUrl,
-  Length,
   MaxLength,
   MinLength,
 } from 'class-validator';
 
-export class CreateBusinessDto {
-
+export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -19,8 +17,8 @@ export class CreateBusinessDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
-  address: string;
+  @IsNumber()
+  age: number;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -29,26 +27,8 @@ export class CreateBusinessDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
-  service: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @Length(6, 50)
-  @IsString()
-  description: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
   @IsNumber()
-  @Length(8, 15)
-  nit: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  @IsUrl()
-  img: string;
+  cellphone: number;
 
   @ApiProperty()
   @IsNotEmpty()

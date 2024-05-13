@@ -1,2 +1,2 @@
-export * from './loginBusiness.dto';
-export * from './registerBusiness.dto';
+export * from './signup-business.dto';
+export * from './login-business.dto';
