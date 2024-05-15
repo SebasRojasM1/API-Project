@@ -15,25 +15,28 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('user/register')
-  @ApiOperation({ summary: 'Registrar una usuario al sistema.', description: 'Registrar una usuario para acceder al sistema y a sus servicios.' })
-  @ApiResponse({ status: 201, description: 'El registro del usuario ha sido exitoso.'})
-  @ApiResponse({ status: 401, description: 'Los datos de registro ingresados son invalidos.' })
-  @ApiResponse({ status: 404, description: 'Cuenta ya existente.' })
-  @ApiResponse({ status: 500, description: 'Se ha producido un error interno del servidor.' })
+  @ApiOperation({ summary: 'Register a user to the system.', description: 'Register a user to access the system and its services.' })
+  @ApiResponse({ status: 201, description: 'User registration was successful.' })
+  @ApiResponse({ status: 401, description: 'The registration data entered is invalid.' })
+  @ApiResponse({ status: 404, description: 'Account already exists.' })
+  @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
   @ApiBody({ description: 'Datos del usuario a crear', type: UserSignUpDto })
   @HttpCode(HttpStatus.CREATED)
   async registerUser(@Body() userSignUp: UserSignUpDto) {
+    console.log(userSignUp)
+
     const user = await this.authService.registerUsers(userSignUp);
+    console.log(user)
 
     return { access_token: user.access_token };
   }
 
   @Post('user/login')
-  @ApiOperation({ summary: 'Ingresar con el usuario previamente registrado.', description: 'Se genera el acceso al sistema por medio de un usuario previamente registrado.' })
-  @ApiResponse({ status: 200, description: 'Inicio de sesión exitoso.'})
-  @ApiResponse({ status: 400, description: 'Los datos ingresados son invalidos.' })
-  @ApiResponse({ status: 404, description: 'El usuario no se encuentra registrado.' })
-  @ApiResponse({ status: 500, description: 'Se ha producido un error interno del servidor.' })
+  @ApiOperation({ summary: 'Log in with a previously registered user.', description: 'Generates access to the system through a previously registered user.' })
+  @ApiResponse({ status: 200, description: 'Successful login.' })
+  @ApiResponse({ status: 400, description: 'The data entered is invalid.' })
+  @ApiResponse({ status: 404, description: 'The user is not registered.' })
+  @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
   @HttpCode(HttpStatus.OK)
   async logInUser(@Body() userLogin: UserLoginDto) {
     const user = await this.authService.logInUsers(userLogin);
@@ -43,11 +46,11 @@ export class AuthController {
 
 
   @Post('business/register')
-  @ApiOperation({ summary: 'Registrar una empresa al sistema.', description: 'Registrar una empresa para acceder al sistema y ofrecer sus servicios a los clientes.' })
-  @ApiResponse({ status: 201, description: 'El registro de la empresa ha sido exitoso.'})
-  @ApiResponse({ status: 401, description: 'Los datos de registro ingresados son invalidos.' })
-  @ApiResponse({ status: 404, description: 'Cuenta ya existente.' })
-  @ApiResponse({ status: 500, description: 'Se ha producido un error interno del servidor.' })
+  @ApiOperation({ summary: 'Register a business to the system.', description: 'Register a business to access the system and offer its services to customers.' })
+  @ApiResponse({ status: 201, description: 'Business registration was successful.' })
+  @ApiResponse({ status: 401, description: 'The registration data entered is invalid.' })
+  @ApiResponse({ status: 404, description: 'Account already exists.' })
+  @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
   @HttpCode(HttpStatus.CREATED)
   async registerBusiness(@Body() BusinessSignUp: BusinessSignUpDto) {
     const business = await this.authService.registerBusiness(BusinessSignUp);
@@ -56,14 +59,14 @@ export class AuthController {
   }
 
   @Post('business/login')
-  @ApiOperation({ summary: 'Ingresar con la cuenta de la empresa previamente registrada.', description: 'Se genera el acceso al sistema por medio de una empresa previamente registrada.' })
-  @ApiResponse({ status: 200, description: 'Inicio de sesión exitoso.'})
-  @ApiResponse({ status: 400, description: 'Información ingresada es invalida.' })
-  @ApiResponse({ status: 404, description: 'La empresa no se encuentra registrada.' })
-  @ApiResponse({ status: 500, description: 'Se ha producido un error interno del servidor.' })
+  @ApiOperation({ summary: 'Log in with a previously registered business account.', description: 'Generates access to the system through a previously registered business.' })
+  @ApiResponse({ status: 200, description: 'Successful login.' })
+  @ApiResponse({ status: 400, description: 'The information entered is invalid.' })
+  @ApiResponse({ status: 404, description: 'The business is not registered.' })
+  @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
   @HttpCode(HttpStatus.OK)
   async logIn(@Body() businessLogin: BusinessLoginDto) {
-    const business = await this.authService.logInUsers(businessLogin);
+    const business = await this.authService.logInBusiness(businessLogin);
 
     return { access_token: business.access_token };
   }

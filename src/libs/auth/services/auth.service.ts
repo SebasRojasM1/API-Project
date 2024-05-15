@@ -78,13 +78,13 @@ export class AuthService {
 
     const hashedPassword = await this.hashService.hash(BusinessSignUp.password);
 
-    const user = await this.businessService.create({
+    const business = await this.businessService.create({
       ...BusinessSignUp, 
       password: hashedPassword,
     });
 
     return await this.getTokens({
-      sub: user.id,
+      sub: business.id,
     });
   }
 
