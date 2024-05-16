@@ -81,6 +81,7 @@ export class AuthService {
     const business = await this.businessService.create({
       ...BusinessSignUp, 
       password: hashedPassword,
+      img: BusinessSignUp.img, // Asegúrate de incluir la URL de la imagen
     });
 
     return await this.getTokens({
