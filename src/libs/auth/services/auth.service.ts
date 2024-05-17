@@ -20,6 +20,7 @@ export class AuthService {
   ) {}
 
   async logInUsers(UserLogin: UserLoginDto) {
+
     const user = await this.userService.findOneByEmail(UserLogin.email);
     if (!user) {
       throw new BadRequestException('User not found. Try again.');
@@ -76,20 +77,24 @@ export class AuthService {
 
   async registerBusiness(BusinessSignUp: BusinessSignUpDto): Promise<Tokens> {
 
-    await this.validateEmailForSignUpBusiness(BusinessSignUp.email);
+    const validate = await this.validateEmailForSignUpBusiness(BusinessSignUp.email);
 
-    const hashedPassword = await this.hashService.hash(BusinessSignUp.password);
+    if (validate == true){
+      const hashedPassword = await this.hashService.hash(BusinessSignUp.password);
 
-    const business = await this.businessService.create({
-      ...BusinessSignUp, 
-      password: hashedPassword,
-    });
-
-    return await this.getTokens({
-      sub: business.id,
-    });
+      const business = await this.businessService.create({
+        ...BusinessSignUp, 
+        password: hashedPassword,
+      });
+  
+      return await this.getTokens({
+        sub: business.id,
+      });
+    }
   }
 
+
+  //generation and return token
   async getTokens(jwtPayload: JwtPayload): Promise<Tokens> {
     const secretKey = process.env.JWT_SECRET;
     if (!secretKey) {
@@ -109,6 +114,7 @@ export class AuthService {
     return { access_token: accessToken };
   }
 
+  //The token sign with the payload generated
   async signToken(payload: JwtPayload, secretKey: string, options: any) {
     return await this.jwtService.signAsync(payload, {
       secret: secretKey,
@@ -117,16 +123,19 @@ export class AuthService {
   }
 
   async validateEmailForSignUpBusiness(email: string): Promise<boolean | undefined> {
-    const business = await this.businessService.findOneByEmail(email);
+
+    const business = await this.businessService.findOneByEmailRegister(email);
 
     if (business) {
       throw new HttpException('The email already exists! Try again.', 400);
     }
+
     return true;
   }
 
   async validateEmailForSignUpUsers(email: string): Promise<boolean | undefined> {
-    const user = await this.userService.findOneByEmail(email);
+
+    const user = await this.userService.findOneByEmailRegister(email);
 
     if (user) {
       throw new HttpException('The email already exists! Try again.', 400);

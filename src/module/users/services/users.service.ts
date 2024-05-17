@@ -31,7 +31,7 @@ export class UsersService {
     return this.userModel.find().exec();
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOneById(id: string): Promise<User> {
     const user = await this.userModel.findById(id).exec();
     if (!user) {
       throw new NotFoundException(`The user with the id ${id} not found`);
@@ -45,6 +45,14 @@ export class UsersService {
       throw new NotFoundException(
         `The user with email ${email} it´s not found`,
       );
+    }
+    return user;
+  }
+
+  async findOneByEmailRegister(email: string): Promise<User> {
+    const user = await this.userModel.findOne({ email }).exec();
+    if (user) {
+      throw new NotFoundException('The email already exists! Try again.');
     }
     return user;
   }

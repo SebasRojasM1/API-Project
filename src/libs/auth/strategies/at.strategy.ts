@@ -4,6 +4,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { JwtPayload } from '../types';
 
 @Injectable()
+
+//configuration of the JWT Strategy 
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor() {
     super({
@@ -13,6 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
+  //Return of the payload Sub 
   validate(payload: JwtPayload): JwtPayload {
     return { sub: payload.sub };
   }

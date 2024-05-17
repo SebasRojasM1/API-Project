@@ -32,7 +32,7 @@ export class UsersController {
   @ApiResponse({status: 404, description: 'No se encontró el usuario con el ID ingresado.'})
   @ApiResponse({status: 500, description: 'Se ha producido un error interno del servidor al buscar el usuario.'})
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+    return this.userService.findOneById(id);
   }
 
   @Patch('update/:id')

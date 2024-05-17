@@ -31,7 +31,7 @@ export class BusinessController {
   @ApiResponse({status: 404, description: 'No se encontró la empresa con el ID proporcionado.'})
   @ApiResponse({status: 500, description: 'Se ha producido un error interno del servidor al buscar la empresa.'})
   findOne(@Param('id') id: string) {
-    return this.businessService.findOne(id);
+    return this.businessService.findOneById(id);
   }
 
   @Patch('/update/:id')

@@ -17,8 +17,7 @@ export class BusinessService {
   ) {}
 
   async create(CreateBusiness: CreateBusinessDto): Promise<Business> {
-    const businessExist = await this.businessModel
-      .findOne({ email: CreateBusiness.email })
+    const businessExist = await this.businessModel.findOne({ email: CreateBusiness.email })
       .exec();
 
     if (businessExist) {
@@ -36,7 +35,7 @@ export class BusinessService {
     return this.businessModel.find().exec();
   }
 
-  async findOne(id: string): Promise<Business> {
+  async findOneById(id: string): Promise<Business> {
     const business = await this.businessModel.findById(id).exec();
     if (!business) {
       throw new NotFoundException(`The business with the id ${id} not found`);
@@ -45,11 +44,21 @@ export class BusinessService {
   }
 
   async findOneByEmail(email: string): Promise<Business> {
+
     const business = await this.businessModel.findOne({email}).exec();
+
     if (!business) {
       throw new NotFoundException(
         `The business with email ${email} it´s not found`,
       );
+    }
+    return business;
+  }
+
+  async findOneByEmailRegister(email: string): Promise<Business> {
+    const business = await this.businessModel.findOne({ email }).exec();
+    if (business) {
+      throw new NotFoundException('The email already exists! Try again.');
     }
     return business;
   }
