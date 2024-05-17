@@ -55,91 +55,92 @@ export class AuthService {
     });
   }
 
-  async logInBusiness(businessLogin: BusinessLoginDto) {
-    const business = await this.businessService.findOneByEmail(businessLogin.email);
-    
-    if (!business) {
-      throw new BadRequestException('Business not found. Try again.');
-    }
+    async logInBusiness(businessLogin: BusinessLoginDto) {
+      const business = await this.businessService.findOneByEmail(businessLogin.email);
+      
+      if (!business) {
+        throw new BadRequestException('Business not found. Try again.');
+      }
 
-    const isPasswordValid = await this.hashService.compare(
-      businessLogin.password,
-      business.password,
-    );
-    if (!isPasswordValid) {
-      throw new BadRequestException('Incorrect password. Try again.');
-    }
+      const isPasswordValid = await this.hashService.compare(
+        businessLogin.password,
+        business.password,
+      );
+      if (!isPasswordValid) {
+        throw new BadRequestException('Incorrect password. Try again.');
+      }
 
-    return await this.getTokens({
-      sub: business.id,
-    });
-  }
-
-  async registerBusiness(BusinessSignUp: BusinessSignUpDto): Promise<Tokens> {
-
-    const validate = await this.validateEmailForSignUpBusiness(BusinessSignUp.email);
-
-    if (validate == true){
-      const hashedPassword = await this.hashService.hash(BusinessSignUp.password);
-
-      const business = await this.businessService.create({
-        ...BusinessSignUp, 
-        password: hashedPassword,
-      });
-  
       return await this.getTokens({
         sub: business.id,
       });
     }
-  }
+
+    async registerBusiness(BusinessSignUp: BusinessSignUpDto): Promise<Tokens> {
+
+      const validate = await this.validateEmailForSignUpBusiness(BusinessSignUp.email);
+
+      if (validate == true){
+          const hashedPassword = await this.hashService.hash(BusinessSignUp.password);
+
+        const business = await this.businessService.create({
+          ...BusinessSignUp, 
+          password: hashedPassword,
+          img: BusinessSignUp.img, // Asegúrate de incluir la URL de la imagen
+        });
+
+        return await this.getTokens({
+          sub: business.id,
+        });
+      }
+    }
 
 
   //generation and return token
-  async getTokens(jwtPayload: JwtPayload): Promise<Tokens> {
-    const secretKey = process.env.JWT_SECRET;
-    if (!secretKey) {
-      throw new Error('SECRET_KEY is not set');
+    async getTokens(jwtPayload: JwtPayload): Promise<Tokens> {
+      const secretKey = process.env.JWT_SECRET;
+      if (!secretKey) {
+        throw new Error('SECRET_KEY is not set');
+      }
+
+      const accessTokenOptions = {
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '20m',
+      };
+
+      const accessToken = await this.signToken(
+        jwtPayload,
+        secretKey,
+        accessTokenOptions,
+      );
+
+      return { access_token: accessToken };
     }
-
-    const accessTokenOptions = {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '20m',
-    };
-
-    const accessToken = await this.signToken(
-      jwtPayload,
-      secretKey,
-      accessTokenOptions,
-    );
-
-    return { access_token: accessToken };
-  }
 
   //The token sign with the payload generated
-  async signToken(payload: JwtPayload, secretKey: string, options: any) {
-    return await this.jwtService.signAsync(payload, {
-      secret: secretKey,
-      ...options, 
-    });
-  }
-
-  async validateEmailForSignUpBusiness(email: string): Promise<boolean | undefined> {
-
-    const business = await this.businessService.findOneByEmailRegister(email);
-
-    if (business) {
-      throw new HttpException('The email already exists! Try again.', 400);
+    async signToken(payload: JwtPayload, secretKey: string, options: any) {
+      return await this.jwtService.signAsync(payload, {
+        secret: secretKey,
+        ...options, 
+      });
     }
 
-    return true;
-  }
+    async validateEmailForSignUpBusiness(email: string): Promise<boolean | undefined> {
 
-  async validateEmailForSignUpUsers(email: string): Promise<boolean | undefined> {
+      const business = await this.businessService.findOneByEmailRegister(email);
 
-    const user = await this.userService.findOneByEmailRegister(email);
+      if (business) {
+        throw new HttpException('The email already exists! Try again.', 400);
+      }
 
-    if (user) {
-      throw new HttpException('The email already exists! Try again.', 400);
+      return true;
     }
-    return true;
-  }
+
+    async validateEmailForSignUpUsers(email: string): Promise<boolean | undefined> {
+
+      const user = await this.userService.findOneByEmailRegister(email);
+
+      if (user) {
+        throw new HttpException('The email already exists! Try again.', 400);
+      }
+      return true;
+    }
 }
