@@ -50,6 +50,7 @@ export class AuthService {
       password: hashedPassword,
     });
 
+    //return token
     return await this.getTokens({
       sub: user.id,
     });
