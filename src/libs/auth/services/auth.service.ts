@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { HashService } from '../../utils/services/hash.service';
 import { BusinessService } from '../../../module/business/services/business.service';
 import { UsersService } from '../../../module/users/services/users.service';
-import { JwtPayload, Tokens } from '../types';
+import { BusinessJwtPayload, JwtPayload, Tokens, UserJwtPayload } from '../types';
 import { UserSignUpDto } from '../dto/users/signup-users.dto';
 import { UserLoginDto } from '../dto/users/login-users.dto';
 import { BusinessLoginDto } from '../dto/business/login-business.dto';
@@ -20,8 +20,6 @@ export class AuthService {
   ) {}
 
   async logInUsers(UserLogin: UserLoginDto) {
-    
-    /*Find the registered account through email*/
     const user = await this.userService.findOneByEmail(UserLogin.email);
     if (!user) {
       throw new BadRequestException('User not found. Try again.');
@@ -36,11 +34,17 @@ export class AuthService {
       throw new BadRequestException('Incorrect password. Try again.');
     }
 
-    /*The token is return with all the configs generated in the other services 
-    and is created as of the business id*/
-    return await this.getTokens({
+    const userPayload: UserJwtPayload = {
       sub: user.id,
-    });
+      name: user.name,
+      email: user.email,
+      age: user.age,
+      cellphone: user.cellphone,
+      role: user.role,
+      type: 'user',
+    };
+
+    return await this.getTokens(userPayload);
   }
   
   async registerUsers(userSignUp: UserSignUpDto): Promise<Tokens> {
@@ -55,108 +59,118 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    //return token
-    return await this.getTokens({
+    const userPayload: UserJwtPayload = {
       sub: user.id,
-    });
+      name: user.name,
+      email: user.email,
+      age: user.age,
+      cellphone: user.cellphone,
+      role: user.role,
+      type: 'user',
+    };
+
+    return await this.getTokens(userPayload);
   }
 
   async logInBusiness(businessLogin: BusinessLoginDto) {
+    const business = await this.businessService.findOneByEmail(businessLogin.email);
+    if (!business) {
+      throw new BadRequestException('Business not found. Try again.');
+    }
 
-      /*Find the registered account through email*/
-      const business = await this.businessService.findOneByEmail(businessLogin.email);
-      
-      if (!business) {
-        throw new BadRequestException('Business not found. Try again.');
-      }
-      /*The hashed password is deshashed for do the comparison with the password typed in the Log In*/
-      const isPasswordValid = await this.hashService.compare(
-        businessLogin.password,
-        business.password,
-      );
-      if (!isPasswordValid) {
-        throw new BadRequestException('Incorrect password. Try again.');
-      }
+    const isPasswordValid = await this.hashService.compare(
+      businessLogin.password,
+      business.password,
+    );
+    if (!isPasswordValid) {
+      throw new BadRequestException('Incorrect password. Try again.');
+    }
 
-      /*The token is return with all the configs generated in the other services 
-      and is created as of the business id*/
-      return await this.getTokens({
-        sub: business.id,
-      });
+    const businessPayload: BusinessJwtPayload = {
+      sub: business.id,
+      name: business.name,
+      email: business.email,
+      address: business.address,
+      service: business.service,
+      description: business.description,
+      nit: business.nit,
+      img: business.img,
+      role: business.role,
+      type: 'business',
+    };
+
+    return await this.getTokens(businessPayload);
   }
-
+  
   async registerBusiness(BusinessSignUp: BusinessSignUpDto): Promise<Tokens> {
 
-      /*confirmation that business email doesn't exist */
-      const validate = await this.validateEmailForSignUpBusiness(BusinessSignUp.email);
+    await this.validateEmailForSignUpBusiness(BusinessSignUp.email);
 
-      if (validate == true){
-          const hashedPassword = await this.hashService.hash(BusinessSignUp.password);
+    const hashedPassword = await this.hashService.hash(BusinessSignUp.password);
 
-        const business = await this.businessService.create({
-          ...BusinessSignUp, 
-          password: hashedPassword,
-          img: BusinessSignUp.img, /*the necessary URL for assign the business image in the register*/
-        });
-        /*The token is return with all the configs generated in the other services 
-        and is created as of the business id*/
-        return await this.getTokens({
-          sub: business.id,
-        });
-      }
+    const business = await this.businessService.create({
+      ...BusinessSignUp, 
+      password: hashedPassword,
+      img: BusinessSignUp.img, // Asegúrate de incluir la URL de la imagen
+    });
+
+    const businessPayload: BusinessJwtPayload = {
+      sub: business.id,
+      name: business.name,
+      email: business.email,
+      address: business.address,
+      service: business.service,
+      description: business.description,
+      nit: business.nit,
+      img: business.img,
+      role: business.role,
+      type: 'business',
+    };
+
+    return await this.getTokens(businessPayload);
   }
 
-
-  /*generation and return token, the token is return with the configuration and the sign*/
-    async getTokens(jwtPayload: JwtPayload): Promise<Tokens> {
-      const secretKey = process.env.JWT_SECRET;
-      if (!secretKey) {
-        throw new Error('SECRET_KEY is not set');
-      }
-
-      const accessTokenOptions = {
-        expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '20m',
-      };
-
-      const accessToken = await this.signToken(
-        jwtPayload,
-        secretKey,
-        accessTokenOptions,
-      );
-
-      return { access_token: accessToken };
+  async getTokens(jwtPayload: JwtPayload): Promise<Tokens> {
+    const secretKey = process.env.JWT_SECRET;
+    if (!secretKey) {
+      throw new Error('SECRET_KEY is not set');
     }
 
-    /*The token sign with the payload generated, we assign the payload, secret key and other 
-    neccesarys configs for the develop of the strategy*/
-    async signToken(payload: JwtPayload, secretKey: string, options: any) {
-      return await this.jwtService.signAsync(payload, {
-        secret: secretKey,
-        ...options, 
-      });
+    const accessTokenOptions = {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '20m',
+    };
+
+    const accessToken = await this.signToken(
+      jwtPayload,
+      secretKey,
+      accessTokenOptions,
+    );
+
+    return { access_token: accessToken };
+  }
+
+  async signToken(payload: JwtPayload, secretKey: string, options: any) {
+    return await this.jwtService.signAsync(payload, {
+      secret: secretKey,
+      ...options, 
+    });
+  }
+
+  async validateEmailForSignUpBusiness(email: string): Promise<boolean | undefined> {
+    const business = await this.businessService.findOneByEmailRegister(email);
+
+    if (business) {
+      throw new HttpException('The email already exists! Try again.', 400);
     }
-    /*Email validation for that the email dont repeat in the business collection and dont generate conflicts 
-    in the requests*/
-    async validateEmailForSignUpBusiness(email: string): Promise<boolean | undefined> {
+    return true;
+  }
 
-      const business = await this.businessService.findOneByEmailRegister(email);
+  async validateEmailForSignUpUsers(email: string): Promise<boolean | undefined> {
+    const user = await this.userService.findOneByEmailRegister(email);
 
-      if (business) {
-        throw new HttpException('The email already exists! Try again.', 400);
-      }
-
-      return true;
+    if (user) {
+      throw new HttpException('The email already exists! Try again.', 400);
     }
-
-    /*Email validation for that the email dont repeat in the user collection and dont generate conflicts 
-    in the requests*/
-    async validateEmailForSignUpUsers(email: string): Promise<boolean | undefined> {
-
-      const user = await this.userService.findOneByEmailRegister(email);
-
-      if (user) {
-        throw new HttpException('The email already exists! Try again.', 400);
-      }
-      return true;
-    }
+    return true;
+  }
 }

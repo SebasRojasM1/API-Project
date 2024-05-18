@@ -26,7 +26,6 @@ export class AuthController {
   @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
   //Swagger documentation about specification of the expected data type
   @ApiBody({ description: 'Data of the user to be created', type: UserSignUpDto })
-  
   @HttpCode(HttpStatus.CREATED)
   async registerUser(@Body() userSignUp: UserSignUpDto) {
     console.log(userSignUp)
@@ -54,7 +53,6 @@ export class AuthController {
 
     return { access_token: user.access_token };
   }
-
 
   @Post('business/register')
   //SWAGGER DOCUMENTATION
