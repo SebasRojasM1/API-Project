@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { HashService } from '../../utils/services/hash.service';
 import { BusinessService } from '../../../module/business/services/business.service';
 import { UsersService } from '../../../module/users/services/users.service';
-import { JwtPayload, Tokens } from '../types';
+import { BusinessJwtPayload, JwtPayload, Tokens, UserJwtPayload } from '../types';
 import { UserSignUpDto } from '../dto/users/signup-users.dto';
 import { UserLoginDto } from '../dto/users/login-users.dto';
 import { BusinessLoginDto } from '../dto/business/login-business.dto';
@@ -33,10 +33,19 @@ export class AuthService {
       throw new BadRequestException('Incorrect password. Try again.');
     }
 
-    return await this.getTokens({
+    const userPayload: UserJwtPayload = {
       sub: user.id,
-    });
+      name: user.name,
+      email: user.email,
+      age: user.age,
+      cellphone: user.cellphone,
+      role: user.role,
+      type: 'user',
+    };
+
+    return await this.getTokens(userPayload);
   }
+  
   async registerUsers(userSignUp: UserSignUpDto): Promise<Tokens> {
 
     await this.validateEmailForSignUpUsers(userSignUp.email);
@@ -48,29 +57,49 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    return await this.getTokens({
+    const userPayload: UserJwtPayload = {
       sub: user.id,
-    });
+      name: user.name,
+      email: user.email,
+      age: user.age,
+      cellphone: user.cellphone,
+      role: user.role,
+      type: 'user',
+    };
+
+    return await this.getTokens(userPayload);
   }
 
   async logInBusiness(businessLogin: BusinessLoginDto) {
-    const user = await this.businessService.findOneByEmail(businessLogin.email);
-    if (!user) {
+    const business = await this.businessService.findOneByEmail(businessLogin.email);
+    if (!business) {
       throw new BadRequestException('Business not found. Try again.');
     }
 
     const isPasswordValid = await this.hashService.compare(
       businessLogin.password,
-      user.password,
+      business.password,
     );
     if (!isPasswordValid) {
       throw new BadRequestException('Incorrect password. Try again.');
     }
 
-    return await this.getTokens({
-      sub: user.id,
-    });
+    const businessPayload: BusinessJwtPayload = {
+      sub: business.id,
+      name: business.name,
+      email: business.email,
+      address: business.address,
+      service: business.service,
+      description: business.description,
+      nit: business.nit,
+      img: business.img,
+      role: business.role,
+      type: 'business',
+    };
+
+    return await this.getTokens(businessPayload);
   }
+
 
   async registerBusiness(BusinessSignUp: BusinessSignUpDto): Promise<Tokens> {
 
@@ -84,9 +113,20 @@ export class AuthService {
       img: BusinessSignUp.img, // Asegúrate de incluir la URL de la imagen
     });
 
-    return await this.getTokens({
+    const businessPayload: BusinessJwtPayload = {
       sub: business.id,
-    });
+      name: business.name,
+      email: business.email,
+      address: business.address,
+      service: business.service,
+      description: business.description,
+      nit: business.nit,
+      img: business.img,
+      role: business.role,
+      type: 'business',
+    };
+
+    return await this.getTokens(businessPayload);
   }
 
   async getTokens(jwtPayload: JwtPayload): Promise<Tokens> {

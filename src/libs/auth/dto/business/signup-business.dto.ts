@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   IsUrl,
   Length,
@@ -60,4 +62,10 @@ export class BusinessSignUpDto {
       'The maximum characters allowed are 25. Please restructure the password',
   })
   password: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  @Transform(({ value }) => value ?? 'business')
+  role: string  = 'business';
 }

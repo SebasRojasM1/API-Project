@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { JwtPayload } from '../types';
+import { BusinessJwtPayload, JwtPayload, UserJwtPayload } from '../types';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -14,6 +15,24 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   validate(payload: JwtPayload): JwtPayload {
-    return { sub: payload.sub };
+    if (payload.type === 'user') {
+      const userPayload: UserJwtPayload = {
+        ...payload,
+        age: payload['age'],
+        cellphone: payload['cellphone'],
+      };
+      return userPayload;
+    } else if (payload.type === 'business') {
+      const businessPayload: BusinessJwtPayload = {
+        ...payload,
+        address: payload['address'],
+        service: payload['service'],
+        description: payload['description'],
+        nit: payload['nit'],
+        img: payload['img'],
+      };
+      return businessPayload;
+    }
+    return payload;
   }
 }
