@@ -25,6 +25,7 @@ export class AuthService {
       throw new BadRequestException('User not found. Try again.');
     }
 
+    /*The hashed password is deshashed for do the comparison with the password typed in the Log In*/
     const isPasswordValid = await this.hashService.compare(
       UserLogin.password,
       user.password,
@@ -48,6 +49,7 @@ export class AuthService {
   
   async registerUsers(userSignUp: UserSignUpDto): Promise<Tokens> {
 
+    /*confirmation that user email doesn't exist */
     await this.validateEmailForSignUpUsers(userSignUp.email);
 
     const hashedPassword = await this.hashService.hash(userSignUp.password);
@@ -99,8 +101,7 @@ export class AuthService {
 
     return await this.getTokens(businessPayload);
   }
-
-
+  
   async registerBusiness(BusinessSignUp: BusinessSignUpDto): Promise<Tokens> {
 
     await this.validateEmailForSignUpBusiness(BusinessSignUp.email);
