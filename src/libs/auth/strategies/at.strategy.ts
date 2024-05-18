@@ -5,6 +5,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { BusinessJwtPayload, JwtPayload, UserJwtPayload } from '../types';
 
 @Injectable()
+
+//configuration of the JWT Strategy 
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor() {
     super({
@@ -14,6 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
+  //Return of the payload Sub 
   validate(payload: JwtPayload): JwtPayload {
     if (payload.type === 'user') {
       const userPayload: UserJwtPayload = {

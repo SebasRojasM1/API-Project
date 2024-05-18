@@ -49,6 +49,7 @@ export class UserSignUpDto {
   })
   password: string;
 
+
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()

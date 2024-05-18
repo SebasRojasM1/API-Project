@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, Patch } from '@nestjs/common';
 import { BusinessService } from '../services/business.service';
 import { CreateBusinessDto } from '../dto/create-business.dto';
 import { UpdateBusinessDto } from '../dto/update-business.dto';
@@ -34,7 +34,7 @@ export class BusinessController {
   @ApiResponse({status: 404, description: 'Business with the provided ID not found.'})
   @ApiResponse({status: 500, description: 'An internal server error occurred while searching for the business.'})
   findOne(@Param('id') id: string) {
-    return this.businessService.findOne(id);
+    return this.businessService.findOneById(id);
   }
 
   @Put('update/:id')

@@ -17,13 +17,12 @@ export class BusinessService {
   ) {}
 
   async create(CreateBusiness: CreateBusinessDto): Promise<Business> {
-    const businessExist = await this.businessModel
-      .findOne({ email: CreateBusiness.email })
+    const businessExist = await this.businessModel.findOne({ email: CreateBusiness.email })
       .exec();
 
     if (businessExist) {
       throw new HttpException(
-        `User with email ${CreateBusiness.email} already exists`,
+        `Business with email ${CreateBusiness.email} already exists`,
         HttpStatus.BAD_REQUEST, 
       );
     }
@@ -36,7 +35,7 @@ export class BusinessService {
     return this.businessModel.find().exec();
   }
 
-  async findOne(id: string): Promise<Business> {
+  async findOneById(id: string): Promise<Business> {
     const business = await this.businessModel.findById(id).exec();
     if (!business) {
       throw new NotFoundException(`The business with the id ${id} not found`);
@@ -45,7 +44,9 @@ export class BusinessService {
   }
 
   async findOneByEmail(email: string): Promise<Business> {
-    const business = await this.businessModel.findOne({ email }).exec();
+
+    const business = await this.businessModel.findOne({email}).exec();
+
     if (!business) {
       throw new NotFoundException(
         `The business with email ${email} it´s not found`,
@@ -57,7 +58,7 @@ export class BusinessService {
   async findOneByEmailRegister(email: string): Promise<Business> {
     const business = await this.businessModel.findOne({ email }).exec();
     if (business) {
-      throw new NotFoundException(`The business with email ${email} already exists. Try again.`);
+      throw new NotFoundException('The email already exists! Try again.');
     }
     return business;
   }
@@ -72,10 +73,11 @@ export class BusinessService {
     return updatedBusiness;
   }
 
-  async deleteBusiness(id: string): Promise<void> {
+  async deleteBusiness(id: string){
     const business = await this.businessModel.findOneAndDelete().exec();
     if (!business) {
       throw new NotFoundException(`The business with id ${id} it´s not found. Try again.`);
     }
+    return business
   }
 }

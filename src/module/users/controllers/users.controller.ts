@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, Patch} from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -35,7 +35,7 @@ export class UsersController {
   @ApiResponse({status: 404, description: 'User with the entered ID not found.'})
   @ApiResponse({status: 500, description: 'An internal server error occurred while searching for the user.'})
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+    return this.userService.findOneById(id);
   }
 
   @Put('update/:id')

@@ -41,9 +41,4 @@ export class CreateUserDto {
       'The maximum characters allowed are 25. Please restructure the password',
   })
   password: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  role: string;
 }
