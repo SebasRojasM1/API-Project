@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, Patch} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, Patch, UseGuards} from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { Role } from 'src/libs/common/enums/rol.enum';
+import { RolesGuard } from 'src/libs/auth/guards/auth.guard';
+import { Roles } from 'src/libs/decorators';
 
 
 @ApiTags('Users') 
@@ -21,6 +24,8 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Find all the users of the system.', description: 'View all users registered in the system.' })
   @ApiResponse({status: 200, description: 'All users were found successfully.'})
   @ApiResponse({status: 404, description: 'No users were found in the system.'})
@@ -30,6 +35,8 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Find the user by ID of the system.', description: 'View a specific user registered in the database.' })
   @ApiResponse({status: 200, description: 'User found successfully.',})
   @ApiResponse({status: 404, description: 'User with the entered ID not found.'})
@@ -39,6 +46,8 @@ export class UsersController {
   }
 
   @Put('update/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Update a user to the system.', description: 'Update a specific user registered in the database.' })
   @ApiResponse({status: 200, description: 'User updated successfully.'})
   @ApiResponse({status: 404, description: 'User with the entered ID not found.'})
@@ -48,6 +57,8 @@ export class UsersController {
   }
 
   @Delete('delete/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Delete a user to the system.', description: 'Delete a user of the system.' })
   @ApiResponse({status: 200, description: 'User deleted successfully.'})
   @ApiResponse({status: 404, description: 'User with the entered ID not found.'})

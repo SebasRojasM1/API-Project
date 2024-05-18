@@ -1,8 +1,12 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, Patch } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Post, Body, Param, Delete, Put, Patch, UseGuards } from '@nestjs/common';
 import { BusinessService } from '../services/business.service';
 import { CreateBusinessDto } from '../dto/create-business.dto';
 import { UpdateBusinessDto } from '../dto/update-business.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { RolesGuard } from 'src/libs/auth/guards/auth.guard';
+import { Role } from 'src/libs/common/enums/rol.enum';
+import { Roles } from 'src/libs/decorators';
 
 @ApiTags('Business') 
 @ApiBearerAuth() 
@@ -20,6 +24,8 @@ export class BusinessController {
   }
 
   @Get()
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Find all the business of the system.', description: 'View all business registered in the system.' })
   @ApiResponse({status: 200, description: 'All business were found successfully.'})
   @ApiResponse({status: 404, description: 'No business were found in the system.'})
@@ -29,6 +35,8 @@ export class BusinessController {
   }
 
   @Get(':id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Find the business by ID of the system.', description: 'View a specific business registered in the database.' })
   @ApiResponse({status: 200, description: 'Business found successfully.'})
   @ApiResponse({status: 404, description: 'Business with the provided ID not found.'})
@@ -38,6 +46,8 @@ export class BusinessController {
   }
 
   @Put('update/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Update a business to the system.', description: 'Update a specific business registered in the database.' })
   @ApiResponse({status: 200, description: 'Business successfully updated.'})
   @ApiResponse({status: 404, description: 'Business with the provided ID not found.'})
@@ -46,7 +56,10 @@ export class BusinessController {
     return this.businessService.updateBusiness(id, updateBusinessDto);
   }
 
+
   @Delete('delete/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Delete a business to the system.', description: 'Delete a business of the system.' })
   @ApiResponse({status: 200, description: 'Business successfully deleted.'})
   @ApiResponse({status: 404, description: 'Business with the provided ID not found.'})
