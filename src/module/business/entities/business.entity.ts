@@ -38,6 +38,7 @@ export class Business extends Document {
   @Length(8, 25)
   @Prop({ required: true })
   password: string;
+  role: string;
 }
 
 export const BusinessSchema = SchemaFactory.createForClass(Business);
