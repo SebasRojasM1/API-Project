@@ -20,12 +20,14 @@ export class AuthService {
   ) {}
 
   async logInUsers(UserLogin: UserLoginDto) {
-
+    
+    /*Find the registered account through email*/
     const user = await this.userService.findOneByEmail(UserLogin.email);
     if (!user) {
       throw new BadRequestException('User not found. Try again.');
     }
 
+    /*The hashed password is deshashed for do the comparison with the password typed in the Log In*/
     const isPasswordValid = await this.hashService.compare(
       UserLogin.password,
       user.password,
@@ -34,6 +36,8 @@ export class AuthService {
       throw new BadRequestException('Incorrect password. Try again.');
     }
 
+    /*The token is return with all the configs generated in the other services 
+    and is created as of the business id*/
     return await this.getTokens({
       sub: user.id,
     });
@@ -41,6 +45,7 @@ export class AuthService {
   
   async registerUsers(userSignUp: UserSignUpDto): Promise<Tokens> {
 
+    /*confirmation that user email doesn't exist */
     await this.validateEmailForSignUpUsers(userSignUp.email);
 
     const hashedPassword = await this.hashService.hash(userSignUp.password);
@@ -56,13 +61,15 @@ export class AuthService {
     });
   }
 
-    async logInBusiness(businessLogin: BusinessLoginDto) {
+  async logInBusiness(businessLogin: BusinessLoginDto) {
+
+      /*Find the registered account through email*/
       const business = await this.businessService.findOneByEmail(businessLogin.email);
       
       if (!business) {
         throw new BadRequestException('Business not found. Try again.');
       }
-
+      /*The hashed password is deshashed for do the comparison with the password typed in the Log In*/
       const isPasswordValid = await this.hashService.compare(
         businessLogin.password,
         business.password,
@@ -71,13 +78,16 @@ export class AuthService {
         throw new BadRequestException('Incorrect password. Try again.');
       }
 
+      /*The token is return with all the configs generated in the other services 
+      and is created as of the business id*/
       return await this.getTokens({
         sub: business.id,
       });
-    }
+  }
 
-    async registerBusiness(BusinessSignUp: BusinessSignUpDto): Promise<Tokens> {
+  async registerBusiness(BusinessSignUp: BusinessSignUpDto): Promise<Tokens> {
 
+      /*confirmation that business email doesn't exist */
       const validate = await this.validateEmailForSignUpBusiness(BusinessSignUp.email);
 
       if (validate == true){
@@ -86,17 +96,18 @@ export class AuthService {
         const business = await this.businessService.create({
           ...BusinessSignUp, 
           password: hashedPassword,
-          img: BusinessSignUp.img, // Asegúrate de incluir la URL de la imagen
+          img: BusinessSignUp.img, /*the necessary URL for assign the business image in the register*/
         });
-
+        /*The token is return with all the configs generated in the other services 
+        and is created as of the business id*/
         return await this.getTokens({
           sub: business.id,
         });
       }
-    }
+  }
 
 
-  //generation and return token
+  /*generation and return token, the token is return with the configuration and the sign*/
     async getTokens(jwtPayload: JwtPayload): Promise<Tokens> {
       const secretKey = process.env.JWT_SECRET;
       if (!secretKey) {
@@ -116,14 +127,16 @@ export class AuthService {
       return { access_token: accessToken };
     }
 
-  //The token sign with the payload generated
+    /*The token sign with the payload generated, we assign the payload, secret key and other 
+    neccesarys configs for the develop of the strategy*/
     async signToken(payload: JwtPayload, secretKey: string, options: any) {
       return await this.jwtService.signAsync(payload, {
         secret: secretKey,
         ...options, 
       });
     }
-
+    /*Email validation for that the email dont repeat in the business collection and dont generate conflicts 
+    in the requests*/
     async validateEmailForSignUpBusiness(email: string): Promise<boolean | undefined> {
 
       const business = await this.businessService.findOneByEmailRegister(email);
@@ -135,6 +148,8 @@ export class AuthService {
       return true;
     }
 
+    /*Email validation for that the email dont repeat in the user collection and dont generate conflicts 
+    in the requests*/
     async validateEmailForSignUpUsers(email: string): Promise<boolean | undefined> {
 
       const user = await this.userService.findOneByEmailRegister(email);

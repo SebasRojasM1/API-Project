@@ -17,9 +17,9 @@ export class AuthController {
 
   @Post('user/register')
   //SWAGGER DOCUMENTATION
-  //Swagger documentation about the process
+  //Swagger documentation about the process executed in this section
   @ApiOperation({ summary: 'Register a user to the system.', description: 'Register a user to access the system and its services.' })
-  //Errors documentation 
+  //Errors swagger documentation 
   @ApiResponse({ status: 201, description: 'User registration was successful.' })
   @ApiResponse({ status: 400, description: 'The registration data entered is invalid.' })
   @ApiResponse({ status: 409, description: 'Account already exists.' })
@@ -39,14 +39,14 @@ export class AuthController {
 
   @Post('user/login')
   //SWAGGER DOCUMENTATION
-  //Swagger documentation about the process
+   //Swagger documentation about the process executed in this section
   @ApiOperation({ summary: 'Log in with a previously registered user.', description: 'Generates access to the system through a previously registered user.' })
-  //Errors documentation 
+  //Errors swagger documentation 
   @ApiResponse({ status: 200, description: 'Successful login.' })
   @ApiResponse({ status: 400, description: 'The data entered is invalid.' })
   @ApiResponse({ status: 404, description: 'The user is not registered.' })
   @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
-   //Swagger documentation about specification of the expected data type
+   //Swagger documentation about specification of the expected data type and structure of the body 
   @ApiBody({ description: 'Data of the user to be logged', type: UserLoginDto })
   @HttpCode(HttpStatus.OK)
   async logInUser(@Body() userLogin: UserLoginDto) {
@@ -58,14 +58,14 @@ export class AuthController {
 
   @Post('business/register')
   //SWAGGER DOCUMENTATION
-  //Swagger documentation about the process
+   //Swagger documentation about the process executed in this section
   @ApiOperation({ summary: 'Register a business to the system.', description: 'Register a business to access the system and offer its services to customers.' })
- //Errors documentation 
+ //Errors swagger documentation 
   @ApiResponse({ status: 201, description: 'Business registration was successful.' })
   @ApiResponse({ status: 400, description: 'The registration data entered is invalid.' })
   @ApiResponse({ status: 409, description: 'Account already exists.' })
   @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
-  //Swagger documentation about specification of the expected data type
+  //Swagger documentation about specification of the expected data type and structure of the body
   @ApiBody({ description: 'Data of the business to be created', type: BusinessSignUpDto })
 
   @HttpCode(HttpStatus.CREATED)
@@ -78,14 +78,14 @@ export class AuthController {
   @Post('business/login')
 
   //SWAGGER DOCUMENTATION
-  //Swagger documentation about the process
+   //Swagger documentation about the process executed in this section
   @ApiOperation({ summary: 'Log in with a previously registered business account.', description: 'Generates access to the system through a previously registered business.' })
-  //Errors documentation 
+  //Errors swagger documentation 
   @ApiResponse({ status: 200, description: 'Successful login.' })
   @ApiResponse({ status: 400, description: 'The information entered is invalid.' })
   @ApiResponse({ status: 404, description: 'The business is not registered.' })
   @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
-  //Swagger documentation about specification of the expected data type
+  //Swagger documentation about specification of the expected data type and structure of the body
   @ApiBody({ description: 'Data of the business to be logged', type: BusinessLoginDto })
 
   @HttpCode(HttpStatus.OK)
