@@ -5,10 +5,10 @@ import { UsersModule } from 'src/module/users/users.module';
 import { UtilsModule } from '../utils/utils.module';
 import { BusinessModule } from 'src/module/business/business.module';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './strategies/at.strategy';
 
 @Module({
   imports: [
-
     //Jwt Module configuration with specific options 
     JwtModule.register({ 
       secret: process.env.JWT_SECRET, 
@@ -19,6 +19,6 @@ import { JwtModule } from '@nestjs/jwt';
     BusinessModule
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Post, Body, HttpCode, HttpStatus, UseInterceptors } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -7,10 +8,9 @@ import { UserLoginDto } from '../dto/users/login-users.dto';
 import { BusinessLoginDto } from '../dto/business/login-business.dto';
 import { LoggingInterceptor} from '../../common/interceptor/logging.interceptor';
 
-
-@ApiTags('Auth services.') 
 @ApiBearerAuth()
 @UseInterceptors(LoggingInterceptor) 
+@ApiTags('Auth services.') 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -26,7 +26,6 @@ export class AuthController {
   @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
   //Swagger documentation about specification of the expected data type
   @ApiBody({ description: 'Data of the user to be created', type: UserSignUpDto })
-  
   @HttpCode(HttpStatus.CREATED)
   async registerUser(@Body() userSignUp: UserSignUpDto) {
     console.log(userSignUp)
@@ -67,7 +66,6 @@ export class AuthController {
   @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
   //Swagger documentation about specification of the expected data type
   @ApiBody({ description: 'Data of the business to be created', type: BusinessSignUpDto })
-
   @HttpCode(HttpStatus.CREATED)
   async registerBusiness(@Body() BusinessSignUp: BusinessSignUpDto) {
     const business = await this.authService.registerBusiness(BusinessSignUp);
@@ -76,7 +74,6 @@ export class AuthController {
   }
 
   @Post('business/login')
-
   //SWAGGER DOCUMENTATION
   //Swagger documentation about the process
   @ApiOperation({ summary: 'Log in with a previously registered business account.', description: 'Generates access to the system through a previously registered business.' })
@@ -87,10 +84,10 @@ export class AuthController {
   @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
   //Swagger documentation about specification of the expected data type
   @ApiBody({ description: 'Data of the business to be logged', type: BusinessLoginDto })
-
   @HttpCode(HttpStatus.OK)
   async logIn(@Body() businessLogin: BusinessLoginDto) {
     const business = await this.authService.logInBusiness(businessLogin);
+    
     return { access_token: business.access_token };
   }
   
