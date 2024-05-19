@@ -25,14 +25,17 @@ export class AuthService {
       throw new BadRequestException('User not found. Try again.');
     }
 
-    /*The hashed password is deshashed for do the comparison with the password typed in the Log In*/
     const isPasswordValid = await this.hashService.compare(
       UserLogin.password,
       user.password,
-    );
+    );console.log(isPasswordValid);
     if (!isPasswordValid) {
       throw new BadRequestException('Incorrect password. Try again.');
     }
+    
+    
+    console.log(user);
+    
 
     const userPayload: UserJwtPayload = {
       sub: user.id,
@@ -52,13 +55,10 @@ export class AuthService {
     /*confirmation that user email doesn't exist */
     await this.validateEmailForSignUpUsers(userSignUp.email);
 
-    const hashedPassword = await this.hashService.hash(userSignUp.password);
-
     const user = await this.userService.create({
-      ...userSignUp, 
-      password: hashedPassword,
+      ...userSignUp
     });
-
+        
     const userPayload: UserJwtPayload = {
       sub: user.id,
       name: user.name,

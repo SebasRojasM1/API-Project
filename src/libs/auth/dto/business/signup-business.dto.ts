@@ -26,6 +26,7 @@ export class BusinessSignUpDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsEmail()
+  @Transform(({ value }) => value.toLowerCase())
   email: string;
 
   @ApiProperty()
@@ -61,6 +62,7 @@ export class BusinessSignUpDto {
     message:
       'The maximum characters allowed are 25. Please restructure the password',
   })
+  @Transform(({ value }) => value.toLowerCase())
   password: string;
 
   @ApiProperty({ required: false })

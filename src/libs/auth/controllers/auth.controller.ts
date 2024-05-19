@@ -37,16 +37,11 @@ export class AuthController {
   }
 
   @Post('user/login')
-  //SWAGGER DOCUMENTATION
-   //Swagger documentation about the process executed in this section
   @ApiOperation({ summary: 'Log in with a previously registered user.', description: 'Generates access to the system through a previously registered user.' })
-  //Errors swagger documentation 
   @ApiResponse({ status: 200, description: 'Successful login.' })
   @ApiResponse({ status: 400, description: 'The data entered is invalid.' })
   @ApiResponse({ status: 404, description: 'The user is not registered.' })
   @ApiResponse({ status: 500, description: 'An internal server error has occurred.' })
-   //Swagger documentation about specification of the expected data type and structure of the body 
-  @ApiBody({ description: 'Data of the user to be logged', type: UserLoginDto })
   @HttpCode(HttpStatus.OK)
   async logInUser(@Body() userLogin: UserLoginDto) {
     const user = await this.authService.logInUsers(userLogin);
