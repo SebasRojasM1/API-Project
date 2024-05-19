@@ -28,12 +28,14 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
   app.enableCors({
     origin: 'http://127.0.0.1:5500',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     allowedHeaders: 'Content-Type, Accept',
   });
+  
   await app.listen(3000);
 
   console.log(`The FROL project is working. http://localhost:3000`);

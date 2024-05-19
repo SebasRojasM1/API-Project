@@ -45,7 +45,7 @@ export class BusinessController {
     return this.businessService.findOneById(id);
   }
 
-  @Put('update/:id')
+  @Patch('update/:id')
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Update a business to the system.', description: 'Update a specific business registered in the database.' })

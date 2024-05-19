@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, Patch, UseGuards} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, UseGuards} from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -45,7 +45,7 @@ export class UsersController {
     return this.userService.findOneById(id);
   }
 
-  @Put('update/:id')
+  @Patch('update/:id')
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Update a user to the system.', description: 'Update a specific user registered in the database.' })
