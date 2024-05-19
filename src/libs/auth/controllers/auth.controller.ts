@@ -28,10 +28,8 @@ export class AuthController {
   @ApiBody({ description: 'Data of the user to be created', type: UserSignUpDto })
   @HttpCode(HttpStatus.CREATED)
   async registerUser(@Body() userSignUp: UserSignUpDto) {
-    console.log(userSignUp)
 
     const user = await this.authService.registerUsers(userSignUp);
-    console.log(user)
 
     return { access_token: user.access_token };
   }

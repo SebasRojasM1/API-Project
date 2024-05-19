@@ -28,14 +28,11 @@ export class AuthService {
     const isPasswordValid = await this.hashService.compare(
       UserLogin.password,
       user.password,
-    );console.log(isPasswordValid);
+    );
     if (!isPasswordValid) {
       throw new BadRequestException('Incorrect password. Try again.');
     }
-    
-    
-    console.log(user);
-    
+        
 
     const userPayload: UserJwtPayload = {
       sub: user.id,
