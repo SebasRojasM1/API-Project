@@ -82,5 +82,4 @@ export class AuthController {
     
     return { access_token: business.access_token };
   }
-  
 }
