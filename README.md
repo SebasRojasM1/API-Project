@@ -142,6 +142,8 @@ Accede a la arquitectura de componentes:
 
 - [Modelo](https://lucid.app/lucidchart/ecd9a1f9-c3e1-4e65-81c8-6f7f3e43d17f/edit?invitationId=inv_ba69fe42-e884-49ab-926d-00b9b2346472&page=0_0#)
 
+- [Modelo](https://lucid.app/lucidchart/ecd9a1f9-c3e1-4e65-81c8-6f7f3e43d17f/edit?viewport_loc=-7591%2C-5832%2C6239%2C2850%2C0_0&invitationId=inv_ba69fe42-e884-49ab-926d-00b9b2346472)
+
 
 ### Arquitectura Hexagonal
 ```sh
