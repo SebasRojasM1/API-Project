@@ -82,10 +82,4 @@ export class AuthController {
     
     return { access_token: business.access_token };
   }
-  
-  @Post("/register/business/java")
-  public ResponseEntity<String> registerBusiness(@RequestBody BusinessPayload payload) {
-      // Lógica para manejar la solicitud y guardar los datos
-      return ResponseEntity.ok("Business registered successfully");
-  }
 }
