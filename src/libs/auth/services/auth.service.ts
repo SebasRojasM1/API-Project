@@ -89,7 +89,7 @@ export class AuthService {
 
     } catch(error){
 
-      console.error(`Error getting and sendint the data to the databases ${error}`)
+      console.error(`Error getting and sendint the data to the database ${error}`)
     }
   }
 
@@ -158,7 +158,7 @@ export class AuthService {
 
       return tokens;
     } catch(error){
-      console.error(`Error getting and sendint the data to the databases ${error}`)
+      console.error(`Error getting and sending the data to the databases ${error}`)
     }
   }
 
