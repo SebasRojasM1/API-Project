@@ -6,6 +6,7 @@ import { UtilsModule } from '../utils/utils.module';
 import { BusinessModule } from 'src/module/business/business.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/at.strategy';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { JwtStrategy } from './strategies/at.strategy';
     }),
     UtilsModule,
     UsersModule,
-    BusinessModule
+    BusinessModule,
+    HttpModule
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

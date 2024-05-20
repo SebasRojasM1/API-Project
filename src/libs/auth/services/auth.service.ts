@@ -9,6 +9,8 @@ import { UserSignUpDto } from '../dto/users/signup-users.dto';
 import { UserLoginDto } from '../dto/users/login-users.dto';
 import { BusinessLoginDto } from '../dto/business/login-business.dto';
 import { BusinessSignUpDto } from '../dto/business/signup-business.dto';
+import { HttpService } from '@nestjs/axios';
+import axios from 'axios';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +19,17 @@ export class AuthService {
     private readonly businessService: BusinessService,
     private readonly jwtService: JwtService,
     private readonly hashService: HashService,
+    private readonly httpService: HttpService
   ) {}
+
+  async sendDataToJava(data: any, url: string): Promise<string> {
+    try {
+        const response = await axios.post(url, data);
+        return response.data;
+    } catch (error) {
+        throw new Error(`Error sending data to Spring Boot: ${error.message}`);
+    }
+  }
 
   async logInUsers(UserLogin: UserLoginDto) {
     const user = await this.userService.findOneByEmail(UserLogin.email);
@@ -49,24 +61,36 @@ export class AuthService {
   
   async registerUsers(userSignUp: UserSignUpDto): Promise<Tokens> {
 
-    /*confirmation that user email doesn't exist */
-    await this.validateEmailForSignUpUsers(userSignUp.email);
+    try {
 
-    const user = await this.userService.create({
-      ...userSignUp
-    });
-        
-    const userPayload: UserJwtPayload = {
-      sub: user.id,
-      name: user.name,
-      email: user.email,
-      age: user.age,
-      cellphone: user.cellphone,
-      role: user.role,
-      type: 'user',
-    };
+      await this.validateEmailForSignUpUsers(userSignUp.email);
 
-    return await this.getTokens(userPayload);
+      const user = await this.userService.create({
+        ...userSignUp
+      });
+          
+      const userPayload: UserJwtPayload = {
+        sub: user.id,
+        name: user.name,
+        email: user.email,
+        age: user.age,
+        cellphone: user.cellphone,
+        role: user.role,
+        type: 'user',
+      };
+  
+      const urlUserJava = 'http://localhost:3000/register/user/java'
+  
+      const tokens = await this.getTokens(userPayload);
+  
+      await this.sendDataToJava( {...userPayload, password: userSignUp.password, token: tokens.access_token }, urlUserJava)
+  
+      return tokens;
+
+    } catch(error){
+
+      console.error(`Error getting and sendint the data to the databases ${error}`)
+    }
   }
 
   async logInBusiness(businessLogin: BusinessLoginDto) {
@@ -101,30 +125,41 @@ export class AuthService {
   
   async registerBusiness(BusinessSignUp: BusinessSignUpDto): Promise<Tokens> {
 
-    await this.validateEmailForSignUpBusiness(BusinessSignUp.email);
+    try{
 
-    const hashedPassword = await this.hashService.hash(BusinessSignUp.password);
+      await this.validateEmailForSignUpBusiness(BusinessSignUp.email);
 
-    const business = await this.businessService.create({
-      ...BusinessSignUp, 
-      password: hashedPassword,
-      img: BusinessSignUp.img, // Asegúrate de incluir la URL de la imagen
-    });
+      const hashedPassword = await this.hashService.hash(BusinessSignUp.password);
 
-    const businessPayload: BusinessJwtPayload = {
-      sub: business.id,
-      name: business.name,
-      email: business.email,
-      address: business.address,
-      service: business.service,
-      description: business.description,
-      nit: business.nit,
-      img: business.img,
-      role: business.role,
-      type: 'business',
-    };
+      const business = await this.businessService.create({
+        ...BusinessSignUp, 
+        password: hashedPassword,
+        img: BusinessSignUp.img, // Asegúrate de incluir la URL de la imagen
+      });
 
-    return await this.getTokens(businessPayload);
+      const businessPayload: BusinessJwtPayload = {
+        sub: business.id,
+        name: business.name,
+        email: business.email,
+        address: business.address,
+        service: business.service,
+        description: business.description,
+        nit: business.nit,
+        img: business.img,
+        role: business.role,
+        type: 'business',
+      };
+
+      const urlBusinessJava = 'http://localhost:3000/register/business/java'
+
+      const tokens = await this.getTokens(businessPayload);
+
+      await this.sendDataToJava( {...businessPayload, password: BusinessSignUp.password, token: tokens.access_token }, urlBusinessJava)
+
+      return tokens;
+    } catch(error){
+      console.error(`Error getting and sendint the data to the databases ${error}`)
+    }
   }
 
   async getTokens(jwtPayload: JwtPayload): Promise<Tokens> {
