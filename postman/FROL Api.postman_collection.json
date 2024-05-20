@@ -1,0 +1,474 @@
+{
+	"info": {
+		"_postman_id": "fdce069b-1e0c-49af-a5b2-7b3cca1e741b",
+		"name": "FROL Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33425968"
+	},
+	"item": [
+		{
+			"name": "Auth service",
+			"item": [
+				{
+					"name": "1. Login users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"sebasrojasm1@gmail.com\",\r\n  \"password\": \"Sebas123\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/auth/user/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1. Register users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Sebastian\",\r\n  \"age\": 24,\r\n  \"email\": \"sebasrojasm1@gmail.com\",\r\n  \"cellphone\": 25252525,\r\n  \"password\": \"Sebas123\",\r\n  \"role\": \"admin\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/auth/user/register",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Login business",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"string\",\r\n  \"password\": \"string\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/auth/business/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"business",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Register business",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"string\",\r\n  \"address\": \"string\",\r\n  \"email\": \"string\",\r\n  \"service\": \"string\",\r\n  \"description\": \"string\",\r\n  \"nit\": 0,\r\n  \"img\": \"string\",\r\n  \"password\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/auth/business/register",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"business",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Business",
+			"item": [
+				{
+					"name": "Create business",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjQ4YjhjYzMxODg1M2E3Nzc1ZTBhOGMiLCJuYW1lIjoiU2ViYXN0acOhbiIsImVtYWlsIjoic2ViYXNyb2phc20xQGdtYWlsLmNvbSIsImFnZSI6MjQsImNlbGxwaG9uZSI6MjMyMzIzMjMsInJvbGUiOiJhZG1pbiIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzE2MDYyNDY1LCJleHAiOjE3MTYwNjYwNjV9.okK58PfVZbkqKV829E5WqjiIHpt0sZkcLRlEsCsKVPk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"string\",\r\n  \"address\": \"string\",\r\n  \"email\": \"string\",\r\n  \"service\": \"string\",\r\n  \"description\": \"string\",\r\n  \"nit\": 0,\r\n  \"img\": \"string\",\r\n  \"password\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/business/create",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"business",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find all business",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjRhNDQ3NzFjYzY4Y2I2NDQ1YmUxNjMiLCJuYW1lIjoiU2ViYXN0aWFuIiwiZW1haWwiOiJzZWJhc3JvamFzbUBnbWFpbC5jb20iLCJhZ2UiOjI0LCJjZWxscGhvbmUiOjI1MjUyNTI1LCJyb2xlIjoiYWRtaW4iLCJ0eXBlIjoidXNlciIsImlhdCI6MTcxNjE0MzIyMywiZXhwIjoxNzE2MTQ2ODIzfQ.4rge6PKPAoo4IrZR8CSabREE106uWhL1afQ3fl5VkOI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/business",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"business"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find business by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/business/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"business",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update business",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"string\",\r\n  \"address\": \"string\",\r\n  \"email\": \"string\",\r\n  \"service\": \"string\",\r\n  \"description\": \"string\",\r\n  \"nit\": 0,\r\n  \"img\": \"string\",\r\n  \"password\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/business/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"business",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete business",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjRhNDU5MjFjYzY4Y2I2NDQ1YmUxNzAiLCJuYW1lIjoiU2ViYXN0aWFuIiwiZW1haWwiOiJzZWJhc3JvamFzbUBnbWFpbC5jb20iLCJhZ2UiOjI0LCJjZWxscGhvbmUiOjI1MjUyNTI1LCJyb2xlIjoiYWRtaW4iLCJ0eXBlIjoidXNlciIsImlhdCI6MTcxNjE0MzUwNiwiZXhwIjoxNzE2MTQ3MTA2fQ.OLvl6xfsq94-HUvwePpfKi0_-Qi6HOVflW-JSGfUZ8w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/business/delete/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"business",
+								"delete",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjQ4YjhjYzMxODg1M2E3Nzc1ZTBhOGMiLCJuYW1lIjoiU2ViYXN0acOhbiIsImVtYWlsIjoic2ViYXNyb2phc20xQGdtYWlsLmNvbSIsImFnZSI6MjQsImNlbGxwaG9uZSI6MjMyMzIzMjMsInJvbGUiOiJhZG1pbiIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzE2MDYyNDY1LCJleHAiOjE3MTYwNjYwNjV9.okK58PfVZbkqKV829E5WqjiIHpt0sZkcLRlEsCsKVPk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"string\",\r\n  \"age\": 0,\r\n  \"email\": \"string\",\r\n  \"cellphone\": 0,\r\n  \"password\": \"string\"  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/user/create",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find all users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjRhNDU5MjFjYzY4Y2I2NDQ1YmUxNzAiLCJuYW1lIjoiU2ViYXN0aWFuIiwiZW1haWwiOiJzZWJhc3JvamFzbUBnbWFpbC5jb20iLCJhZ2UiOjI0LCJjZWxscGhvbmUiOjI1MjUyNTI1LCJyb2xlIjoiYWRtaW4iLCJ0eXBlIjoidXNlciIsImlhdCI6MTcxNjE0MzYwMiwiZXhwIjoxNzE2MTQ3MjAyfQ.1G4JCAoxf9P9zXA5sSJIZGjqaq-qIlApSp63awvRdrs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/user",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find user by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/user/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjRhNDQ3NzFjYzY4Y2I2NDQ1YmUxNjMiLCJuYW1lIjoiU2ViYXN0aWFuIiwiZW1haWwiOiJzZWJhc3JvamFzbUBnbWFpbC5jb20iLCJhZ2UiOjI0LCJjZWxscGhvbmUiOjI1MjUyNTI1LCJyb2xlIjoiYWRtaW4iLCJ0eXBlIjoidXNlciIsImlhdCI6MTcxNjE0MzIyMywiZXhwIjoxNzE2MTQ2ODIzfQ.4rge6PKPAoo4IrZR8CSabREE106uWhL1afQ3fl5VkOI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"string\",\r\n  \"age\": 0,\r\n  \"email\": \"string\",\r\n  \"cellphone\": 0,\r\n  \"password\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/user/update/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"update",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjRhNDQ3NzFjYzY4Y2I2NDQ1YmUxNjMiLCJuYW1lIjoiU2ViYXN0aWFuIiwiZW1haWwiOiJzZWJhc3JvamFzbUBnbWFpbC5jb20iLCJhZ2UiOjI0LCJjZWxscGhvbmUiOjI1MjUyNTI1LCJyb2xlIjoiYWRtaW4iLCJ0eXBlIjoidXNlciIsImlhdCI6MTcxNjE0MzIyMywiZXhwIjoxNzE2MTQ2ODIzfQ.4rge6PKPAoo4IrZR8CSabREE106uWhL1afQ3fl5VkOI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/user/delete/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"delete",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
