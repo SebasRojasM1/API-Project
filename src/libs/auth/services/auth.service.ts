@@ -79,7 +79,7 @@ export class AuthService {
         type: 'user',
       };
   
-      const urlUserJava = 'http://localhost:3000/register/user/java'
+      const urlUserJava = 'http://localhost:8080/api/v1/cliente'
   
       const tokens = await this.getTokens(userPayload);
   
@@ -115,7 +115,7 @@ export class AuthService {
       service: business.service,
       description: business.description,
       nit: business.nit,
-      img: business.img,
+      urlImg: business.urlImg,
       role: business.role,
       type: 'business',
     };
@@ -134,7 +134,7 @@ export class AuthService {
       const business = await this.businessService.create({
         ...BusinessSignUp, 
         password: hashedPassword,
-        img: BusinessSignUp.img, // Asegúrate de incluir la URL de la imagen
+        urlImg: BusinessSignUp.urlImg, // Asegúrate de incluir la URL de la imagen
       });
 
       const businessPayload: BusinessJwtPayload = {
@@ -145,12 +145,12 @@ export class AuthService {
         service: business.service,
         description: business.description,
         nit: business.nit,
-        img: business.img,
+        urlImg: business.urlImg,
         role: business.role,
         type: 'business',
       };
 
-      const urlBusinessJava = 'http://localhost:3000/register/business/java'
+      const urlBusinessJava = 'http://localhost:8080/api/v1/company'
 
       const tokens = await this.getTokens(businessPayload);
 

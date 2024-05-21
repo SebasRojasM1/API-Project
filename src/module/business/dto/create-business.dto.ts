@@ -48,7 +48,7 @@ export class CreateBusinessDto {
   @IsNotEmpty()
   @IsString()
   @IsUrl()
-  img: string;
+  urlImg: string;
 
   @ApiProperty()
   @IsNotEmpty()

@@ -32,7 +32,7 @@ export class Business extends Document {
 
   @IsString()
   @Prop({ required: true })
-  img: string;
+  urlImg: string;
 
   @IsString()
   @Length(8, 25)

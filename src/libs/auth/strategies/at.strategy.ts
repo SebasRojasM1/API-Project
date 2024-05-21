@@ -32,7 +32,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         service: payload['service'],
         description: payload['description'],
         nit: payload['nit'],
-        img: payload['img'],
+        urlImg: payload['img'],
       };
       return businessPayload;
     }
