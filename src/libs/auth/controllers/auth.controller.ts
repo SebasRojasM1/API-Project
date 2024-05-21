@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body, HttpCode, HttpStatus, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, UseInterceptors, Get } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserSignUpDto } from '../dto/users/signup-users.dto';
@@ -15,7 +15,12 @@ import { LoggingInterceptor} from '../../common/interceptor/logging.interceptor'
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('user/register')
+  @Get('')
+  async get(){
+    return 'Hola'
+  }
+
+  @Post('/user/register')
   //SWAGGER DOCUMENTATION
   //Swagger documentation about the process executed in this section
   @ApiOperation({ summary: 'Register a user to the system.', description: 'Register a user to access the system and its services.' })
@@ -34,7 +39,7 @@ export class AuthController {
     return { access_token: user.access_token };
   }
 
-  @Post('user/login')
+  @Post('/user/login')
   @ApiOperation({ summary: 'Log in with a previously registered user.', description: 'Generates access to the system through a previously registered user.' })
   @ApiResponse({ status: 200, description: 'Successful login.' })
   @ApiResponse({ status: 400, description: 'The data entered is invalid.' })
@@ -47,7 +52,7 @@ export class AuthController {
     return { access_token: user.access_token };
   }
 
-  @Post('business/register')
+  @Post('/business/register')
   //SWAGGER DOCUMENTATION
    //Swagger documentation about the process executed in this section
   @ApiOperation({ summary: 'Register a business to the system.', description: 'Register a business to access the system and offer its services to customers.' })
@@ -65,7 +70,7 @@ export class AuthController {
     return { access_token: business.access_token };
   }
 
-  @Post('business/login')
+  @Post('/business/login')
   //SWAGGER DOCUMENTATION
    //Swagger documentation about the process executed in this section
   @ApiOperation({ summary: 'Log in with a previously registered business account.', description: 'Generates access to the system through a previously registered business.' })

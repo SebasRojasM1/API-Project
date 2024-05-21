@@ -16,5 +16,5 @@ export type BusinessJwtPayload = JwtPayload & {
   service: string;
   description: string;
   nit: number;
-  img: string;
+  urlImg: string;
 };

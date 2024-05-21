@@ -50,7 +50,7 @@ export class BusinessSignUpDto {
   @IsNotEmpty()
   @IsString()
   @IsUrl()
-  img: string;
+  urlImg: string;
 
   @ApiProperty()
   @IsNotEmpty()
